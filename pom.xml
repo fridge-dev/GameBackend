@@ -8,16 +8,6 @@
     <name>my-app</name>
     <url>http://maven.apache.org</url>
 
-    <!-- Code coverage props -->
-    <properties>
-        <jacoco-maven-plugin.classRatio>100</jacoco-maven-plugin.classRatio>
-        <jacoco-maven-plugin.instructionRatio>80</jacoco-maven-plugin.instructionRatio>
-        <jacoco-maven-plugin.branchRatio>80</jacoco-maven-plugin.branchRatio>
-        <jacoco-maven-plugin.lineRatio>80</jacoco-maven-plugin.lineRatio>
-        <jacoco-maven-plugin.complexityRatio>50</jacoco-maven-plugin.complexityRatio>
-        <jacoco-maven-plugin.methodRatio>95</jacoco-maven-plugin.methodRatio>
-    </properties>
-
     <build>
         <plugins>
 
@@ -31,67 +21,27 @@
             </plugin>
 
             <!--
-                JaCoCo setup tutorial @ https://www.petrikainulainen.net/programming/maven/creating-code-coverage-reports-for-unit-and-integration-tests-with-the-jacoco-maven-plugin/
-            -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.15</version>
-                <configuration>
-                    <!-- Sets the VM argument line used when unit tests are run. -->
-                    <argLine>${surefireArgLine}</argLine>
-                    <!-- Skips unit tests if the value of skip.unit.tests property is true -->
-                    <skipTests>${skip.unit.tests}</skipTests>
-                    <!-- Excludes integration tests when unit tests are run. -->
-                    <excludes>
-                        <exclude>**/IT*.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-
-            <!--
-                JaCoCo setup tutorial @ https://www.petrikainulainen.net/programming/maven/creating-code-coverage-reports-for-unit-and-integration-tests-with-the-jacoco-maven-plugin/
+                JaCoCo setup tutorial @ https://automationrhapsody.com/automated-code-coverage-of-unit-tests-with-jacoco-and-maven/
             -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.1</version>
                 <executions>
-                    <!--
-                        Prepares the property pointing to the JaCoCo runtime agent which
-                        is passed as VM argument when Maven the Surefire plugin is executed.
-                    -->
+                    <!-- Prepares the property pointing to the JaCoCo runtime agent which is passed as VM argument when Maven the Surefire plugin is executed. -->
                     <execution>
-                        <id>pre-unit-test</id>
+                        <id>jacoco-init</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
-                            <!--
-                                Sets the name of the property containing the settings
-                                for JaCoCo runtime agent.
-                            -->
-                            <propertyName>surefireArgLine</propertyName>
-                        </configuration>
                     </execution>
-                    <!--
-                        Ensures that the code coverage report for unit tests is created after
-                        unit tests have been run.
-                    -->
+                    <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run. -->
                     <execution>
-                        <id>post-unit-test</id>
+                        <id>jacoco-report</id>
                         <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
-                            <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
