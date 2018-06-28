@@ -1,4 +1,4 @@
-package com.mycompany.app.frj.dal;
+package com.mycompany.app.frj.dal.impl;
 
 import com.mycompany.app.frj.dal.ddb.accessors.UserDdbAccessor;
 import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;

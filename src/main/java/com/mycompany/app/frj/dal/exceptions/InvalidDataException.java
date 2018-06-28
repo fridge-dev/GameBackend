@@ -1,4 +1,4 @@
-package com.mycompany.app.frj.dao.exceptions;
+package com.mycompany.app.frj.dal.exceptions;
 
 /**
  * Exception thrown when data in the DB is in some invalid state.

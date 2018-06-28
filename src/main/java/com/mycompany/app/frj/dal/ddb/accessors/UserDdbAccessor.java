@@ -1,4 +1,4 @@
-package com.mycompany.app.frj.dao.ddb.accessors;
+package com.mycompany.app.frj.dal.ddb.accessors;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
@@ -6,8 +6,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.google.common.collect.ImmutableMap;
-import com.mycompany.app.frj.dao.ddb.items.UserDdbItem;
-import com.mycompany.app.frj.dao.exceptions.InvalidDataException;
+import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;
+import com.mycompany.app.frj.dal.exceptions.InvalidDataException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,11 +27,18 @@ public class UserDdbAccessor extends BaseDynamoDbAccessor<UserDdbItem> {
      * Save a user as long as no other user has had that username.
      */
     public void createUser(final UserDdbItem item) {
-        Map<String, ExpectedAttributeValue> expectUserDoesntExist = ImmutableMap.of(UserDdbItem.COL_USERNAME, new ExpectedAttributeValue(false));
+        Map<String, ExpectedAttributeValue> expectUserDoesntExist = ImmutableMap.of(UserDdbItem.COL_USER_ID, new ExpectedAttributeValue(false));
 
         DynamoDBSaveExpression saveCondition = new DynamoDBSaveExpression().withExpected(expectUserDoesntExist);
 
         super.saveItem(item, saveCondition);
+    }
+
+    /**
+     * Loads user item from unique user ID
+     */
+    public Optional<UserDdbItem> loadUser(final String userId) {
+        return super.loadItem(userId);
     }
 
     /**
@@ -43,7 +50,8 @@ public class UserDdbAccessor extends BaseDynamoDbAccessor<UserDdbItem> {
 
         DynamoDBQueryExpression<UserDdbItem> query = new DynamoDBQueryExpression<UserDdbItem>()
                 .withIndexName(UserDdbItem.INDEX_USERNAME)
-                .withHashKeyValues(key);
+                .withHashKeyValues(key)
+                .withConsistentRead(false);
 
         QueryResultPage<UserDdbItem> resultPage = super.querySinglePage(query);
         List<UserDdbItem> results = resultPage.getResults();

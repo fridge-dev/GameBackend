@@ -1,4 +1,4 @@
-package com.mycompany.app.frj.dao.ddb.accessors;
+package com.mycompany.app.frj.dal.ddb.accessors;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDeleteExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
-import com.mycompany.app.frj.dao.ddb.items.DdbItem;
+import com.mycompany.app.frj.dal.ddb.items.DdbItem;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 

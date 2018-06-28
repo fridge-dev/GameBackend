@@ -1,4 +1,4 @@
-package com.mycompany.app.frj.interfaces.models;
+package com.mycompany.app.frj.app.interfaces.models;
 
 import lombok.Data;
 

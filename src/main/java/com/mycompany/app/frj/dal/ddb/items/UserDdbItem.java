@@ -1,4 +1,4 @@
-package com.mycompany.app.frj.dao.ddb.items;
+package com.mycompany.app.frj.dal.ddb.items;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -18,8 +18,8 @@ public class UserDdbItem implements DdbItem {
     public static final String TABLE_NAME = "Users";
     public static final String INDEX_USERNAME = "GSI-Username";
 
-    private static final String COL_USER_ID = "UserID";
-    public static final String COL_USERNAME = "Username";
+    public static final String COL_USER_ID = "UserID";
+    private static final String COL_USERNAME = "Username";
     private static final String COL_PASSWORD = "Password";
 
     /**
