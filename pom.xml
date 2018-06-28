@@ -23,9 +23,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <argLine>-Dsqlite4java.library.path=${basedir}/lib/sqlite4java</argLine>
                 </configuration>
             </plugin>
 
@@ -41,6 +50,7 @@
                         <exclude>**/com/mycompany/app/frj/interfaces/models/*.class</exclude>
                         <exclude>**/com/mycompany/app/frj/dao/ddb/items/*.class</exclude>
                         <exclude>**/com/mycompany/app/frj/dao/exceptions/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/dao/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -143,5 +153,70 @@
             <version>21.0</version>
         </dependency>
 
+        <!-- https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html#DynamoDBLocal.Maven -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>DynamoDBLocal</artifactId>
+            <version>[1.11,2.0)</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/exec-maven-plugin -->
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
     </dependencies>
+
+    <repositories>
+        <!-- https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html#DynamoDBLocal.Maven -->
+        <repository>
+            <id>dynamodb-local-oregon</id>
+            <name>DynamoDB Local Release Repository</name>
+            <url>https://s3-us-west-2.amazonaws.com/dynamodb-local/release</url>
+        </repository>
+    </repositories>
+
+    <profiles>
+        <profile>
+            <id>start-dynamodb-local</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.4.0</version>
+                        <executions>
+                            <execution>
+                                <phase>initialize</phase>
+                                <configuration>
+                                    <executable>java</executable>
+                                    <arguments>
+                                        <argument>-cp</argument>
+                                        <classpath/>
+                                        <argument>-Dsqlite4java.library.path=${basedir}/target/dependencies</argument>
+                                        <argument>com.amazonaws.services.dynamodbv2.local.main.ServerRunner</argument>
+                                        <argument>-inMemory</argument>
+                                        <argument>-port</argument>
+                                        <argument>8000</argument>
+                                    </arguments>
+                                </configuration>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
