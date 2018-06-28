@@ -34,7 +34,14 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
                 <configuration>
-                    <argLine>-Dsqlite4java.library.path=${basedir}/lib/sqlite4java</argLine>
+                    <!--
+                        Sqlite4java is needed by DynamoDB Local, but argLine is also needed by JaCoCo.
+                        See JaCoCo help links:
+                            1. https://stackoverflow.com/questions/18107375/getting-skipping-jacoco-execution-due-to-missing-execution-data-file-upon-exec
+                            2. https://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html
+                            3. https://stackoverflow.com/questions/23190107/cannot-use-jacoco-jvm-args-and-surefire-jvm-args-together-in-maven
+                    -->
+                    <argLine>-Dsqlite4java.library.path=${basedir}/lib/sqlite4java ${argLine}</argLine>
                 </configuration>
             </plugin>
 
