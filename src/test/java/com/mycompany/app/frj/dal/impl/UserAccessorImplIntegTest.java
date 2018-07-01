@@ -1,17 +1,14 @@
 package com.mycompany.app.frj.dal.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.mycompany.app.frj.dal.config.DataAccessConfig;
+import com.mycompany.app.frj.dal.config.TestDataAccessConfig;
+import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
 import java.util.Optional;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -19,9 +16,9 @@ import org.junit.Test;
  *
  * @author alecva
  */
-@Ignore
 public class UserAccessorImplIntegTest {
 
+    private static final String USER_ID = "souhgaougaasgunjs9hf184";
     private static final String USERNAME = "fridge";
     private static final String PASSWORD = "H^g97R%vk,";
 
@@ -29,13 +26,16 @@ public class UserAccessorImplIntegTest {
 
     @Before
     public void setup() {
-        DataAccessConfig config = new DataAccessConfig(RandomStringUtils.random(30));
+        TestDataAccessConfig config = new TestDataAccessConfig();
+        config.createTable(UserDdbItem.class);
+
         userAccessor = config.userAccessor();
     }
 
     @Test
     public void createUser_RetrieveUser() throws Exception {
         User userToWrite = User.builder()
+                .userId(USER_ID)
                 .username(USERNAME)
                 .password(PASSWORD)
                 .build();
@@ -47,9 +47,7 @@ public class UserAccessorImplIntegTest {
         assertTrue(userOptional.isPresent());
         User userReadBack = userOptional.get();
 
-        assertEquals(userToWrite.getUsername(), userReadBack.getUsername());
-        assertNotEquals(userToWrite.getPassword(), userReadBack.getPassword());
-        assertNotNull(userReadBack.getUserId());
+        assertEquals(userToWrite, userReadBack);
     }
 
 }

@@ -4,9 +4,7 @@ import com.mycompany.app.frj.dal.ddb.accessors.UserDdbAccessor;
 import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
-import com.mycompany.app.frj.dal.utils.SecureHashUtil;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -19,26 +17,13 @@ public class UserAccessorImpl implements UserAccessor {
 
     private final UserDdbAccessor userDdbAccessor;
 
-    private final SecureHashUtil hashUtil;
-
+    /**
+     * TODO
+     */
     public void createNewUser(final User user) {
-        UserDdbItem item = new UserDdbItem();
-
-        String userId = newUserId();
-
-        item.setUserId(userId);
-        item.setUsername(user.getUsername());
-        item.setPassword(hashPassword(user.getPassword(), userId));
+        UserDdbItem item = domainTypeToItem(user);
 
         userDdbAccessor.createUser(item);
-    }
-
-    private String newUserId() {
-        return UUID.randomUUID().toString();
-    }
-
-    private String hashPassword(final String password, final String userId) {
-        return hashUtil.hash(password, userId);
     }
 
     /**
@@ -47,6 +32,16 @@ public class UserAccessorImpl implements UserAccessor {
     public Optional<User> getUserByUsername(final String username) {
         return userDdbAccessor.loadUserByUsername(username)
                 .map(this::itemToDomainType);
+    }
+
+    private UserDdbItem domainTypeToItem(final User user) {
+        UserDdbItem item = new UserDdbItem();
+
+        item.setUserId(user.getUserId());
+        item.setUsername(user.getUsername());
+        item.setPassword(user.getPassword());
+
+        return item;
     }
 
     private User itemToDomainType(final UserDdbItem item) {

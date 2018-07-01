@@ -1,38 +1,45 @@
 package com.mycompany.app.frj.dal.config;
 
-import com.mycompany.app.frj.dal.config.ddb.DynamoDbConfig;
-import com.mycompany.app.frj.dal.config.ddb.LocalDynamoDbConfig;
+import com.mycompany.app.frj.dal.ddb.accessors.UserDdbAccessor;
+import com.mycompany.app.frj.dal.impl.UserAccessorImpl;
+import com.mycompany.app.frj.dal.interfaces.DataAccessorProvider;
+import com.mycompany.app.frj.dal.interfaces.UserAccessor;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.Synchronized;
 
 /**
  * TODO
  *
  * @author alecva
  */
-public class DataAccessConfig extends DataAccessInternalConfig {
+@RequiredArgsConstructor
+public class DataAccessConfig implements DataAccessorProvider {
 
     /**
-     * Config using real DDB
+     * Dependencies
      */
-    public DataAccessConfig(
-            final String awsRegion,
-            final String awsKey,
-            final String passwordSalt
-    ) {
-        super(
-                new DynamoDbConfig(awsRegion, awsKey),
-                passwordSalt
-        );
+    private final String awsRegion;
+    private final String awsKey;
+
+    /**
+     * Lazy singletons
+     */
+    @Setter(AccessLevel.PACKAGE)
+    private DynamoDbConfig dynamoDbConfig;
+
+    @Override
+    public UserAccessor userAccessor() {
+        return new UserAccessorImpl(new UserDdbAccessor(dynamoDbConfig().dynamoDBMapper()));
     }
 
-    /**
-     * Config using local DDB
-     */
-    public DataAccessConfig(
-            final String passwordSalt
-    ) {
-        super(
-                new LocalDynamoDbConfig(),
-                passwordSalt
-        );
+    @Synchronized
+    private DynamoDbConfig dynamoDbConfig() {
+        if (this.dynamoDbConfig == null) {
+            this.dynamoDbConfig = new DynamoDbConfig(awsRegion, awsKey);
+        }
+
+        return this.dynamoDbConfig;
     }
 }

@@ -1,4 +1,4 @@
-package com.mycompany.app.frj.dal.config.ddb;
+package com.mycompany.app.frj.dal.config;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -6,44 +6,54 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.ConsistentReads;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.Synchronized;
 
 /**
- * TODO
+ * This config is responsible for creating the AWS DynamoDB client instance.
  *
  * @author alecva
  */
 @RequiredArgsConstructor
-public class DynamoDbConfig {
+/* pkg */ class DynamoDbConfig {
 
+    /**
+     * Dependencies
+     */
     private final String awsRegion;
-
     private final String awsKey;
 
     /**
      * Lazy singletons
      */
-    private DynamoDBMapper dynamoDbMapper;
+    private DynamoDBMapper dynamoDBMapper;
 
+    @Setter(AccessLevel.PACKAGE)
+    private AmazonDynamoDB amazonDynamoDB;
+
+    /**
+     * If this isn't lazily created, then UTs cannot override the Local DB via Setter.
+     */
     @Synchronized
     public DynamoDBMapper dynamoDBMapper() {
-        if (dynamoDbMapper == null) {
-            dynamoDbMapper = instantiateDynamoDbMapper();
+        if (dynamoDBMapper == null) {
+            dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB(), getDdbClientConfig());
         }
 
-        return dynamoDbMapper;
+        return dynamoDBMapper;
     }
 
-    private DynamoDBMapper instantiateDynamoDbMapper() {
-        return new DynamoDBMapper(amazonDynamoDB(), getDdbClientConfig());
-    }
+    private AmazonDynamoDB amazonDynamoDB() {
+        if (amazonDynamoDB == null) {
+            amazonDynamoDB = AmazonDynamoDBClient.builder()
+                    .withRegion(awsRegion)
+                    .withCredentials(getAwsCredentials())
+                    .build();
+        }
 
-    protected AmazonDynamoDB amazonDynamoDB() {
-        return AmazonDynamoDBClient.builder()
-                .withRegion(awsRegion)
-                .withCredentials(getAwsCredentials())
-                .build();
+        return amazonDynamoDB;
     }
 
     // Consider moving this to generic AWS config if onboarded with more services.
