@@ -54,10 +54,20 @@
                 <version>0.8.1</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/com/mycompany/app/frj/interfaces/models/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/dao/ddb/items/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/dao/exceptions/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/dao/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
+                        <!-- POJOs -->
+                        <exclude>**/com/mycompany/app/frj/app/interfaces/models/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/dal/ddb/items/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/dal/models/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/app/password/models/*.class</exclude>
+                        <!-- Exceptions -->
+                        <exclude>**/com/mycompany/app/frj/dal/exceptions/*.class</exclude>
+                        <!-- Configs -->
+                        <exclude>**/com/mycompany/app/frj/app/config/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/dal/config/*.class</exclude>
+
+                        <!-- Individual Classes -->
+                        <exclude>**/com/mycompany/app/frj/dal/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/app/password/PasswordModule.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -136,6 +146,14 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
 

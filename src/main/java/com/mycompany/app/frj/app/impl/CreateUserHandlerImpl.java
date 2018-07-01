@@ -4,8 +4,12 @@ import com.mycompany.app.frj.app.auth.AuthTokenGenerator;
 import com.mycompany.app.frj.app.interfaces.CreateUserHandler;
 import com.mycompany.app.frj.app.interfaces.models.CreateUserInput;
 import com.mycompany.app.frj.app.interfaces.models.CreateUserOutput;
+import com.mycompany.app.frj.app.password.PasswordHasher;
+import com.mycompany.app.frj.app.password.models.CannotPerformHashException;
+import com.mycompany.app.frj.app.password.models.InvalidHashException;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -19,6 +23,8 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
     private final UserAccessor userAccessor;
 
     private final AuthTokenGenerator authTokenGenerator;
+
+    private final PasswordHasher passwordHasher;
 
     /**
      * TODO
@@ -38,13 +44,30 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
     }
 
     private void createUser(final String username, final String password) {
+        String userId = newUserId();
+
+        String hashedPassword = null;
+        try {
+            hashedPassword = passwordHasher.createStorableHash(password);
+        } catch (InvalidHashException e) {
+            // TODO
+            e.printStackTrace();
+        } catch (CannotPerformHashException e) {
+            // TODO
+            e.printStackTrace();
+        }
+
         User user = User.builder()
+                .userId(userId)
                 .username(username)
-                .password(password)
+                .password(hashedPassword)
                 .build();
 
         userAccessor.createNewUser(user);
+    }
 
+    private String newUserId() {
+        return UUID.randomUUID().toString();
     }
 
     /**
