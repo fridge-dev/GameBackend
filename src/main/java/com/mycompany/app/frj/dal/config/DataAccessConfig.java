@@ -1,8 +1,11 @@
 package com.mycompany.app.frj.dal.config;
 
+import com.mycompany.app.frj.dal.ddb.accessors.UserSessionDdbAccessor;
 import com.mycompany.app.frj.dal.ddb.accessors.UserDdbAccessor;
+import com.mycompany.app.frj.dal.impl.UserSessionAccessorImpl;
 import com.mycompany.app.frj.dal.impl.UserAccessorImpl;
 import com.mycompany.app.frj.dal.interfaces.DataAccessorProvider;
+import com.mycompany.app.frj.dal.interfaces.UserSessionAccessor;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +35,11 @@ public class DataAccessConfig implements DataAccessorProvider {
     @Override
     public UserAccessor userAccessor() {
         return new UserAccessorImpl(new UserDdbAccessor(dynamoDbConfig().dynamoDBMapper()));
+    }
+
+    @Override
+    public UserSessionAccessor userSessionAccessor() {
+        return new UserSessionAccessorImpl(new UserSessionDdbAccessor(dynamoDbConfig().dynamoDBMapper()));
     }
 
     @Synchronized

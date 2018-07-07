@@ -2,12 +2,12 @@ package com.mycompany.app.frj.dal.ddb.accessors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;
 import com.mycompany.app.frj.dal.ddb.testutils.TestUtilDynamoDbAccessorTestBase;
 import com.mycompany.app.frj.dal.exceptions.InvalidDataException;
+import com.mycompany.app.frj.testutils.TestUtilExceptionValidator;
 import java.util.Optional;
 import org.junit.Test;
 
@@ -39,12 +39,7 @@ public class UserDdbAccessorTest extends TestUtilDynamoDbAccessorTestBase<UserDd
 
         accessor.createUser(user);
 
-        try {
-            accessor.createUser(user);
-            fail();
-        } catch (ConditionalCheckFailedException e) {
-            // Expected
-        }
+        TestUtilExceptionValidator.validateThrown(ConditionalCheckFailedException.class, () -> accessor.createUser(user));
     }
 
     @Test

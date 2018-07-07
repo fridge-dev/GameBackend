@@ -7,12 +7,13 @@ import com.mycompany.app.frj.dal.config.TestDataAccessConfig;
 import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
+import com.mycompany.app.frj.dal.models.keys.UserDataAccessKey;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * TODO
+ * Functional integration test of the {@link UserAccessorImpl} class.
  *
  * @author alecva
  */
@@ -39,15 +40,17 @@ public class UserAccessorImplIntegTest {
                 .username(USERNAME)
                 .password(PASSWORD)
                 .build();
+        UserDataAccessKey userKey = UserDataAccessKey.builder()
+                .username(userToWrite.getUsername())
+                .build();
 
-        userAccessor.createNewUser(userToWrite);
+        userAccessor.create(userToWrite);
 
-        Optional<User> userOptional = userAccessor.getUserByUsername(userToWrite.getUsername());
+        Optional<User> userOptional = userAccessor.load(userKey);
 
         assertTrue(userOptional.isPresent());
         User userReadBack = userOptional.get();
 
         assertEquals(userToWrite, userReadBack);
     }
-
 }

@@ -9,6 +9,7 @@ import com.mycompany.app.frj.app.password.models.CannotPerformHashException;
 import com.mycompany.app.frj.app.password.models.InvalidHashException;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
+import com.mycompany.app.frj.dal.models.keys.UserDataAccessKey;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +35,7 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
         String password = input.getPassword();
 
         createUser(username, password);
-        User user = loadUser(username);
+        User user = loadOurOwnWrite(username);
         String token = authTokenGenerator.generateToken(user);
 
         return CreateUserOutput.builder()
@@ -63,7 +64,7 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
                 .password(hashedPassword)
                 .build();
 
-        userAccessor.createNewUser(user);
+        userAccessor.create(user);
     }
 
     private String newUserId() {
@@ -71,9 +72,13 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
     }
 
     /**
-     * Read-our-own-write to ensure the DB is in consistent state (GSI updated), and also to retrieve the created user ID.
+     * Read-our-own-write to ensure the DB is in consistent state (GSI updated).
      */
-    private User loadUser(final String username) {
-        return userAccessor.getUserByUsername(username).orElseThrow(() -> new IllegalStateException("nope"));
+    private User loadOurOwnWrite(final String username) {
+        UserDataAccessKey key = UserDataAccessKey.builder()
+                .username(username)
+                .build();
+
+        return userAccessor.load(key).orElseThrow(() -> new IllegalStateException("nope"));
     }
 }

@@ -4,11 +4,12 @@ import com.mycompany.app.frj.dal.ddb.accessors.UserDdbAccessor;
 import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
+import com.mycompany.app.frj.dal.models.keys.UserDataAccessKey;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 /**
- * TODO
+ * Database accessor abstraction for User data.
  *
  * @author alecva
  */
@@ -18,19 +19,20 @@ public class UserAccessorImpl implements UserAccessor {
     private final UserDdbAccessor userDdbAccessor;
 
     /**
-     * TODO
+     * Create new user.
      */
-    public void createNewUser(final User user) {
+    @Override
+    public void create(final User user) {
         UserDdbItem item = domainTypeToItem(user);
 
         userDdbAccessor.createUser(item);
     }
 
     /**
-     * TODO
+     * Load user by user name.
      */
-    public Optional<User> getUserByUsername(final String username) {
-        return userDdbAccessor.loadUserByUsername(username)
+    public Optional<User> load(final UserDataAccessKey key) {
+        return userDdbAccessor.loadUserByUsername(key.getUsername())
                 .map(this::itemToDomainType);
     }
 

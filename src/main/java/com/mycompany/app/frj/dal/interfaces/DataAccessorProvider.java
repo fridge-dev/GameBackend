@@ -1,12 +1,14 @@
 package com.mycompany.app.frj.dal.interfaces;
 
 /**
- * TODO
+ * Config interface for Data Access Layer (DAL).
  *
  * @author alecva
  */
 public interface DataAccessorProvider {
 
     UserAccessor userAccessor();
+
+    UserSessionAccessor userSessionAccessor();
 
 }
