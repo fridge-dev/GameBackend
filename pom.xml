@@ -70,6 +70,7 @@
                         <!-- Individual Classes -->
                         <exclude>**/com/mycompany/app/frj/dal/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
                         <exclude>**/com/mycompany/app/frj/app/password/PasswordModule.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/app/sessions/SessionModule.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

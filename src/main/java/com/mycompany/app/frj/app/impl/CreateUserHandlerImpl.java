@@ -1,15 +1,17 @@
 package com.mycompany.app.frj.app.impl;
 
-import com.mycompany.app.frj.app.auth.AuthTokenGenerator;
 import com.mycompany.app.frj.app.interfaces.CreateUserHandler;
 import com.mycompany.app.frj.app.interfaces.models.CreateUserInput;
 import com.mycompany.app.frj.app.interfaces.models.CreateUserOutput;
 import com.mycompany.app.frj.app.password.PasswordHasher;
 import com.mycompany.app.frj.app.password.models.CannotPerformHashException;
 import com.mycompany.app.frj.app.password.models.InvalidHashException;
+import com.mycompany.app.frj.app.sessions.SessionManager;
+import com.mycompany.app.frj.app.sessions.models.CreateSessionInput;
+import com.mycompany.app.frj.app.sessions.models.SessionData;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
-import com.mycompany.app.frj.dal.models.keys.UserDataAccessKey;
+import com.mycompany.app.frj.dal.models.keys.UserDataKey;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +25,7 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
 
     private final UserAccessor userAccessor;
 
-    private final AuthTokenGenerator authTokenGenerator;
+    private final SessionManager sessionManager;
 
     private final PasswordHasher passwordHasher;
 
@@ -36,11 +38,11 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
 
         createUser(username, password);
         User user = loadOurOwnWrite(username);
-        String token = authTokenGenerator.generateToken(user);
+        SessionData token = createSessionToken(user);
 
         return CreateUserOutput.builder()
                 .userId(user.getUserId())
-                .authToken(token)
+                .sessionToken(token)
                 .build();
     }
 
@@ -75,10 +77,18 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
      * Read-our-own-write to ensure the DB is in consistent state (GSI updated).
      */
     private User loadOurOwnWrite(final String username) {
-        UserDataAccessKey key = UserDataAccessKey.builder()
+        UserDataKey key = UserDataKey.builder()
                 .username(username)
                 .build();
 
         return userAccessor.load(key).orElseThrow(() -> new IllegalStateException("nope"));
+    }
+
+    private SessionData createSessionToken(final User user) {
+        CreateSessionInput sessionInput = CreateSessionInput.builder()
+                .userId(user.getUserId())
+                .build();
+
+        return sessionManager.createSession(sessionInput);
     }
 }

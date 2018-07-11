@@ -1,5 +1,6 @@
 package com.mycompany.app.frj.app.interfaces.models;
 
+import com.mycompany.app.frj.app.sessions.models.SessionData;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,6 +15,6 @@ public class CreateUserOutput {
 
     private final String userId;
 
-    private final String authToken;
+    private final SessionData sessionToken;
 
 }
