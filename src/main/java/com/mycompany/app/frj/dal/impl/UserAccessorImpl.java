@@ -25,6 +25,7 @@ public class UserAccessorImpl implements UserAccessor {
     public void create(final User user) {
         UserDdbItem item = domainTypeToItem(user);
 
+        // Does not handle conditional writes
         userDdbAccessor.createUser(item);
     }
 

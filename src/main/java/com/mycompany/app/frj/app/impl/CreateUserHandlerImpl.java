@@ -1,27 +1,30 @@
 package com.mycompany.app.frj.app.impl;
 
-import com.mycompany.app.frj.app.interfaces.CreateUserHandler;
-import com.mycompany.app.frj.app.interfaces.models.CreateUserInput;
-import com.mycompany.app.frj.app.interfaces.models.CreateUserOutput;
+import com.mycompany.app.frj.app.api.CreateUserHandler;
+import com.mycompany.app.frj.app.api.exceptions.InternalAppException;
+import com.mycompany.app.frj.app.api.models.CreateUserInput;
+import com.mycompany.app.frj.app.api.models.CreateUserOutput;
 import com.mycompany.app.frj.app.password.PasswordHasher;
 import com.mycompany.app.frj.app.password.models.CannotPerformHashException;
 import com.mycompany.app.frj.app.password.models.InvalidHashException;
 import com.mycompany.app.frj.app.sessions.SessionManager;
 import com.mycompany.app.frj.app.sessions.models.CreateSessionInput;
 import com.mycompany.app.frj.app.sessions.models.SessionData;
+import com.mycompany.app.frj.app.utils.UniqueIdUtils;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
 import com.mycompany.app.frj.dal.models.keys.UserDataKey;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 /**
- * TODO
+ * Top level class for creating a new user account.
  *
  * @author alecva
  */
 @RequiredArgsConstructor
 public class CreateUserHandlerImpl implements CreateUserHandler {
+
+    private final UniqueIdUtils uniqueIdUtils;
 
     private final UserAccessor userAccessor;
 
@@ -30,9 +33,9 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
     private final PasswordHasher passwordHasher;
 
     /**
-     * TODO
+     * Handle request by creating user, then creating a session for that user.
      */
-    public CreateUserOutput handleCreateUser(final CreateUserInput input) {
+    public CreateUserOutput handleCreateUser(final CreateUserInput input) throws InternalAppException {
         String username = input.getUsername();
         String password = input.getPassword();
 
@@ -46,18 +49,14 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
                 .build();
     }
 
-    private void createUser(final String username, final String password) {
-        String userId = newUserId();
+    private void createUser(final String username, final String password) throws InternalAppException {
+        String userId = uniqueIdUtils.newUserId();
 
-        String hashedPassword = null;
+        String hashedPassword;
         try {
             hashedPassword = passwordHasher.createStorableHash(password);
-        } catch (InvalidHashException e) {
-            // TODO
-            e.printStackTrace();
-        } catch (CannotPerformHashException e) {
-            // TODO
-            e.printStackTrace();
+        } catch (InvalidHashException | CannotPerformHashException e) {
+            throw new InternalAppException("Failed to create a storable hash of the new user's password.", e);
         }
 
         User user = User.builder()
@@ -66,11 +65,8 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
                 .password(hashedPassword)
                 .build();
 
+        // Does not handle case when username already exists :0
         userAccessor.create(user);
-    }
-
-    private String newUserId() {
-        return UUID.randomUUID().toString();
     }
 
     /**
@@ -81,6 +77,7 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
                 .username(username)
                 .build();
 
+        // Should add retries instead.
         return userAccessor.load(key).orElseThrow(() -> new IllegalStateException("nope"));
     }
 

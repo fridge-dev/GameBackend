@@ -2,16 +2,17 @@ package com.mycompany.app.frj.dal.config;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded;
+import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
- * TODO
+ * Configure DynamoDb to use local, in-memory instance rather than remote instance.
  *
  * @author alecva
  */
 public class LocalDynamoDbConfig extends DynamoDbConfig {
 
-    @Getter
+    @Getter(AccessLevel.PACKAGE)
     private final AmazonDynamoDB amazonDbLocal;
 
     public LocalDynamoDbConfig() {
@@ -19,6 +20,4 @@ public class LocalDynamoDbConfig extends DynamoDbConfig {
         this.amazonDbLocal = DynamoDBEmbedded.create().amazonDynamoDB();
         super.setAmazonDynamoDB(this.amazonDbLocal);
     }
-
-
 }

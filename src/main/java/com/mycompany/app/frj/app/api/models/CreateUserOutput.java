@@ -1,11 +1,11 @@
-package com.mycompany.app.frj.app.interfaces.models;
+package com.mycompany.app.frj.app.api.models;
 
 import com.mycompany.app.frj.app.sessions.models.SessionData;
 import lombok.Builder;
 import lombok.Data;
 
 /**
- * TODO
+ * Output of the {@link com.mycompany.app.frj.app.api.CreateUserHandler}.
  *
  * @author alecva
  */

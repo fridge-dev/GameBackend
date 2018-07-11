@@ -27,8 +27,7 @@ public class UserAccessorImplIntegTest {
 
     @Before
     public void setup() {
-        TestDataAccessConfig config = new TestDataAccessConfig();
-        config.createTable(UserDdbItem.class);
+        TestDataAccessConfig config = new TestDataAccessConfig(UserDdbItem.class);
 
         userAccessor = config.userAccessor();
     }

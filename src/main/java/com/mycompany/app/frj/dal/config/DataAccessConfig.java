@@ -13,7 +13,7 @@ import lombok.Setter;
 import lombok.Synchronized;
 
 /**
- * TODO
+ * Configuration for the Data Access Layer.
  *
  * @author alecva
  */

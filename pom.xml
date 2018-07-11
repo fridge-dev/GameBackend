@@ -55,7 +55,8 @@
                 <configuration>
                     <excludes>
                         <!-- POJOs -->
-                        <exclude>**/com/mycompany/app/frj/app/interfaces/models/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/app/api/models/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/app/api/exceptions/*.class</exclude>
                         <exclude>**/com/mycompany/app/frj/dal/ddb/items/*.class</exclude>
                         <exclude>**/com/mycompany/app/frj/dal/models/*.class</exclude>
                         <exclude>**/com/mycompany/app/frj/dal/models/keys/*.class</exclude>
