@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class UserSessionDataAccessKey implements AppDataAccessKey {
+public class UserSessionDataKey implements AppDataKey {
 
     private final String userId;
 

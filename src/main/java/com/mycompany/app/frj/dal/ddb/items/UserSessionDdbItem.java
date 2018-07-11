@@ -27,7 +27,7 @@ public class UserSessionDdbItem implements DdbItem {
     private String userId;
 
     /**
-     * UserSession ID.
+     * Unique session ID of the user. Only one session per user.
      */
     @DynamoDBAttribute(attributeName = COL_SESSION_ID)
     private String sessionId;

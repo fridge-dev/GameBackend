@@ -7,6 +7,6 @@ package com.mycompany.app.frj.dal.models.keys;
  *
  * @author alecva
  */
-public interface AppDataAccessKey {
+public interface AppDataKey {
     // Empty
 }

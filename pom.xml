@@ -58,7 +58,9 @@
                         <exclude>**/com/mycompany/app/frj/app/interfaces/models/*.class</exclude>
                         <exclude>**/com/mycompany/app/frj/dal/ddb/items/*.class</exclude>
                         <exclude>**/com/mycompany/app/frj/dal/models/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/dal/models/keys/*.class</exclude>
                         <exclude>**/com/mycompany/app/frj/app/password/models/*.class</exclude>
+                        <exclude>**/com/mycompany/app/frj/app/sessions/models/*.class</exclude>
                         <!-- Exceptions -->
                         <exclude>**/com/mycompany/app/frj/dal/exceptions/*.class</exclude>
                         <!-- Configs -->

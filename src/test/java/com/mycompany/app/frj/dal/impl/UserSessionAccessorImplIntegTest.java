@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import com.mycompany.app.frj.dal.config.TestDataAccessConfig;
 import com.mycompany.app.frj.dal.ddb.items.UserSessionDdbItem;
 import com.mycompany.app.frj.dal.interfaces.UserSessionAccessor;
-import com.mycompany.app.frj.dal.models.UserSession;
-import com.mycompany.app.frj.dal.models.keys.UserSessionDataAccessKey;
+import com.mycompany.app.frj.dal.models.PersistedUserSession;
+import com.mycompany.app.frj.dal.models.keys.UserSessionDataKey;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,18 +34,18 @@ public class UserSessionAccessorImplIntegTest {
 
     @Test
     public void createThenLoad() throws Exception {
-        UserSession userSession = UserSession.builder()
+        PersistedUserSession userSession = PersistedUserSession.builder()
                 .userId(USER_ID)
                 .sessionId(SESSION_ID)
-                .expiryTimestamp(EXPIRY)
+                .expiryTimestampMs(EXPIRY)
                 .build();
-        UserSessionDataAccessKey userSessionKey = UserSessionDataAccessKey.builder()
+        UserSessionDataKey userSessionKey = UserSessionDataKey.builder()
                 .userId(userSession.getUserId())
                 .build();
 
         userSessionAccessor.create(userSession);
 
-        Optional<UserSession> loadedSession = userSessionAccessor.load(userSessionKey);
+        Optional<PersistedUserSession> loadedSession = userSessionAccessor.load(userSessionKey);
 
         assertEquals(userSession, loadedSession.get());
     }

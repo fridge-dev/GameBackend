@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class UserSession implements AppDataModel {
+public class PersistedUserSession implements AppDataModel {
 
     /**
      * The ID of the user who the session belongs to.
@@ -25,6 +25,6 @@ public class UserSession implements AppDataModel {
     /**
      * Session should be considered inactive is timestamp is in the past.
      */
-    private final long expiryTimestamp;
+    private final long expiryTimestampMs;
 
 }

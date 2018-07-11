@@ -7,7 +7,7 @@ import com.mycompany.app.frj.dal.config.TestDataAccessConfig;
 import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
-import com.mycompany.app.frj.dal.models.keys.UserDataAccessKey;
+import com.mycompany.app.frj.dal.models.keys.UserDataKey;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class UserAccessorImplIntegTest {
                 .username(USERNAME)
                 .password(PASSWORD)
                 .build();
-        UserDataAccessKey userKey = UserDataAccessKey.builder()
+        UserDataKey userKey = UserDataKey.builder()
                 .username(userToWrite.getUsername())
                 .build();
 

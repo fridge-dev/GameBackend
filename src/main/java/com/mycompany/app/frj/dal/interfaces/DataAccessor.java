@@ -1,7 +1,7 @@
 package com.mycompany.app.frj.dal.interfaces;
 
 import com.mycompany.app.frj.dal.models.AppDataModel;
-import com.mycompany.app.frj.dal.models.keys.AppDataAccessKey;
+import com.mycompany.app.frj.dal.models.keys.AppDataKey;
 import java.util.Optional;
 
 /**
@@ -12,7 +12,7 @@ import java.util.Optional;
  *
  * @author alecva
  */
-public interface DataAccessor<K extends AppDataAccessKey, V extends AppDataModel> {
+public interface DataAccessor<K extends AppDataKey, V extends AppDataModel> {
 
     void create(V data);
 

@@ -4,7 +4,7 @@ import com.mycompany.app.frj.dal.ddb.accessors.UserDdbAccessor;
 import com.mycompany.app.frj.dal.ddb.items.UserDdbItem;
 import com.mycompany.app.frj.dal.interfaces.UserAccessor;
 import com.mycompany.app.frj.dal.models.User;
-import com.mycompany.app.frj.dal.models.keys.UserDataAccessKey;
+import com.mycompany.app.frj.dal.models.keys.UserDataKey;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,7 @@ public class UserAccessorImpl implements UserAccessor {
     /**
      * Load user by user name.
      */
-    public Optional<User> load(final UserDataAccessKey key) {
+    public Optional<User> load(final UserDataKey key) {
         return userDdbAccessor.loadUserByUsername(key.getUsername())
                 .map(this::itemToDomainType);
     }
