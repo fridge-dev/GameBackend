@@ -55,23 +55,23 @@
                 <configuration>
                     <excludes>
                         <!-- POJOs -->
-                        <exclude>**/com/mycompany/app/frj/app/api/models/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/app/api/exceptions/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/dal/ddb/items/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/dal/models/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/dal/models/keys/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/app/password/models/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/app/sessions/models/*.class</exclude>
+                        <exclude>**/com/frjgames/app/api/models/*.class</exclude>
+                        <exclude>**/com/frjgames/app/api/exceptions/*.class</exclude>
+                        <exclude>**/com/frjgames/dal/ddb/items/*.class</exclude>
+                        <exclude>**/com/frjgames/dal/models/*.class</exclude>
+                        <exclude>**/com/frjgames/dal/models/keys/*.class</exclude>
+                        <exclude>**/com/frjgames/app/password/models/*.class</exclude>
+                        <exclude>**/com/frjgames/app/sessions/models/*.class</exclude>
                         <!-- Exceptions -->
-                        <exclude>**/com/mycompany/app/frj/dal/exceptions/*.class</exclude>
+                        <exclude>**/com/frjgames/dal/exceptions/*.class</exclude>
                         <!-- Configs -->
-                        <exclude>**/com/mycompany/app/frj/app/config/*.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/dal/config/*.class</exclude>
+                        <exclude>**/com/frjgames/app/config/*.class</exclude>
+                        <exclude>**/com/frjgames/dal/config/*.class</exclude>
 
                         <!-- Individual Classes -->
-                        <exclude>**/com/mycompany/app/frj/dal/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/app/password/PasswordModule.class</exclude>
-                        <exclude>**/com/mycompany/app/frj/app/sessions/SessionModule.class</exclude>
+                        <exclude>**/com/frjgames/dal/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
+                        <exclude>**/com/frjgames/app/password/PasswordModule.class</exclude>
+                        <exclude>**/com/frjgames/app/sessions/SessionModule.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

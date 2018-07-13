@@ -1,0 +1,21 @@
+package com.frjgames.dal.interfaces;
+
+import com.frjgames.dal.models.AppDataModel;
+import com.frjgames.dal.models.keys.AppDataKey;
+import java.util.Optional;
+
+/**
+ * Generic accessor for Data Access Layer (DAL).
+ *
+ * Less generic access patterns (batch/paginated reads, updates) should not go here, and instead,
+ * in the specific extension of this interface.
+ *
+ * @author fridge
+ */
+public interface DataAccessor<K extends AppDataKey, V extends AppDataModel> {
+
+    void create(V data);
+
+    Optional<V> load(K key);
+
+}
