@@ -14,8 +14,14 @@ import lombok.Data;
 @Builder
 public class CreateUserOutput {
 
+    /**
+     * The unique user ID created for this user.
+     */
     private final String userId;
 
+    /**
+     * The session token which can be provided with each request to prove user has signed in.
+     */
     private final SessionData sessionToken;
 
 }
