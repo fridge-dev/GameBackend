@@ -55,10 +55,10 @@ public class PasswordHasher {
      * the correct password hash stored in a database. It is assumed that the provided "correct" hash is encoded by what was returned
      * from the {@link #createStorableHash(String)} method.
      */
-    public boolean matches(final String password, final String correctHash) throws InvalidHashException, CannotPerformHashException {
+    public boolean matches(final String rawPassword, final String correctHash) throws InvalidHashException, CannotPerformHashException {
         PasswordHashParams params = hashEncoder.decodeHash(correctHash);
 
-        byte[] actualHash = algorithm.hash(password, params);
+        byte[] actualHash = algorithm.hash(rawPassword, params);
 
         return slowEquals(params.getHash(), actualHash);
     }

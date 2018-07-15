@@ -1,11 +1,12 @@
 package com.frjgames.app.impl;
 
 import com.frjgames.app.api.ApiHandler;
-import com.frjgames.app.password.PasswordModule;
-import com.frjgames.dal.interfaces.DataAccessorProvider;
+import com.frjgames.app.api.AuthenticateUserHandler;
 import com.frjgames.app.api.CreateUserHandler;
+import com.frjgames.app.password.PasswordModule;
 import com.frjgames.app.sessions.SessionModule;
 import com.frjgames.app.utils.UniqueIdUtils;
+import com.frjgames.dal.interfaces.DataAccessorProvider;
 import lombok.Synchronized;
 
 /**
@@ -27,6 +28,7 @@ public class ApiHandlerConfiguration {
      * Internal classes
      */
     private CreateUserHandler createUserHandlerSingleton;
+    private AuthenticateUserHandler authenticateUserHandlerSingleton;
 
     /**
      * Instantiate all application layer modules with the low level modules.
@@ -48,6 +50,19 @@ public class ApiHandlerConfiguration {
         }
 
         return createUserHandlerSingleton;
+    }
+
+    @Synchronized
+    public AuthenticateUserHandler getAuthenticateUserHandler() {
+        if (authenticateUserHandlerSingleton == null) {
+            authenticateUserHandlerSingleton = new AuthenticateUserHandlerImpl(
+                    dataAccessorProvider.userAccessor(),
+                    sessionModule.sessionManager(),
+                    passwordModule.passwordHasher()
+            );
+        }
+
+        return authenticateUserHandlerSingleton;
     }
 
 }
