@@ -1,4 +1,4 @@
-package com.frjgames.app.api.exceptions;
+package com.frjgames.app.api.models.exceptions;
 
 /**
  * Exception thrown when authenticating the user failed due to invalid params from the caller.

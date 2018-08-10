@@ -1,4 +1,4 @@
-package com.frjgames.app.api.exceptions;
+package com.frjgames.app.api.models.exceptions;
 
 /**
  * Exception when application layer has an internal, unrecoverable failure.

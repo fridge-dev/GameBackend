@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.when;
 
-import com.frjgames.app.api.exceptions.InvalidAuthInputException;
-import com.frjgames.app.api.models.AuthenticateUserInput;
-import com.frjgames.app.api.models.AuthenticateUserOutput;
+import com.frjgames.app.api.models.exceptions.InvalidAuthInputException;
+import com.frjgames.app.api.models.inputs.AuthenticateUserInput;
+import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
 import com.frjgames.app.password.PasswordHasher;
 import com.frjgames.app.password.models.InvalidHashException;
 import com.frjgames.app.sessions.SessionManager;
@@ -69,7 +69,7 @@ public class AuthenticateUserHandlerImplTest {
         when(injectedPasswordHasher.matches(CLIENT_PASSWORD, PERSISTED_PASSWORD)).thenReturn(true);
         when(injectedSessionManager.createSession(argThat(matchesUserId(USER_ID)))).thenReturn(mockSession);
 
-        AuthenticateUserOutput output = subject.handleAuthenticateUser(newInput());
+        AuthenticateUserOutput output = subject.handle(newInput());
 
         assertEquals(mockSession, output.getSessionToken());
     }
@@ -78,7 +78,7 @@ public class AuthenticateUserHandlerImplTest {
     public void handleAuthenticateUser_UserNotFound() throws Exception {
         when(injectedUserAccessor.load(argThat(matchesUsername(USERNAME)))).thenReturn(Optional.empty());
 
-        subject.handleAuthenticateUser(newInput());
+        subject.handle(newInput());
     }
 
     @Test(expected = InvalidAuthInputException.class)
@@ -86,7 +86,7 @@ public class AuthenticateUserHandlerImplTest {
         when(injectedUserAccessor.load(argThat(matchesUsername(USERNAME)))).thenReturn(Optional.of(mockUser));
         when(injectedPasswordHasher.matches(CLIENT_PASSWORD, PERSISTED_PASSWORD)).thenThrow(new InvalidHashException("fake"));
 
-        subject.handleAuthenticateUser(newInput());
+        subject.handle(newInput());
     }
 
     @Test(expected = InvalidAuthInputException.class)
@@ -94,7 +94,7 @@ public class AuthenticateUserHandlerImplTest {
         when(injectedUserAccessor.load(argThat(matchesUsername(USERNAME)))).thenReturn(Optional.of(mockUser));
         when(injectedPasswordHasher.matches(CLIENT_PASSWORD, PERSISTED_PASSWORD)).thenReturn(false);
 
-        subject.handleAuthenticateUser(newInput());
+        subject.handle(newInput());
     }
 
     private TestUtilArgMatcher<UserDataKey> matchesUsername(final String username) {

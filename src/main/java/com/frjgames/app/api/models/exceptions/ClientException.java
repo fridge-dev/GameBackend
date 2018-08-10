@@ -1,4 +1,4 @@
-package com.frjgames.app.api.exceptions;
+package com.frjgames.app.api.models.exceptions;
 
 /**
  * Exception of the caller's fault. Similar to HTTP 4xx.

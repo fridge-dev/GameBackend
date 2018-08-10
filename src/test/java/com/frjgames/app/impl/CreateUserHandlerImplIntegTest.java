@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import com.frjgames.app.api.CreateUserHandler;
-import com.frjgames.app.api.models.CreateUserInput;
-import com.frjgames.app.api.models.CreateUserOutput;
+import com.frjgames.app.api.models.inputs.CreateUserInput;
+import com.frjgames.app.api.models.outputs.CreateUserOutput;
 import com.frjgames.app.sessions.models.SessionData;
 import com.frjgames.dal.config.TestDataAccessConfig;
 import com.frjgames.dal.ddb.items.UserDdbItem;
@@ -38,7 +38,7 @@ public class CreateUserHandlerImplIntegTest {
                 .password("asdf1234")
                 .build();
 
-        CreateUserOutput output = createUserHandler.handleCreateUser(input);
+        CreateUserOutput output = createUserHandler.handle(input);
 
         SessionData sessionToken = output.getSessionToken();
         assertEquals(output.getUserId(), sessionToken.getUserId());
@@ -53,9 +53,9 @@ public class CreateUserHandlerImplIntegTest {
                 .password("asdf1234")
                 .build();
 
-        createUserHandler.handleCreateUser(input);
+        createUserHandler.handle(input);
 
         // This should throw appropriate exception.
-        createUserHandler.handleCreateUser(input);
+        createUserHandler.handle(input);
     }
 }

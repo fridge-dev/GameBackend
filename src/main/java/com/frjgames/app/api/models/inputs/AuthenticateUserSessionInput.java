@@ -1,4 +1,4 @@
-package com.frjgames.app.api.models;
+package com.frjgames.app.api.models.inputs;
 
 import com.frjgames.app.api.AuthenticateUserSessionHandler;
 import com.frjgames.app.sessions.models.SessionData;

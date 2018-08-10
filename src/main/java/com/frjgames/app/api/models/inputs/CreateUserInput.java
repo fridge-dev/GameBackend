@@ -1,4 +1,4 @@
-package com.frjgames.app.api.models;
+package com.frjgames.app.api.models.inputs;
 
 import com.frjgames.app.api.CreateUserHandler;
 import lombok.Builder;

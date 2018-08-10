@@ -54,19 +54,14 @@
                 <version>0.8.1</version>
                 <configuration>
                     <excludes>
-                        <!-- POJOs -->
-                        <exclude>**/com/frjgames/app/api/models/*.class</exclude>
-                        <exclude>**/com/frjgames/app/api/exceptions/*.class</exclude>
+                        <!-- Global rules -->
+                        <exclude>**/config/*.class</exclude>
+                        <exclude>**/exceptions/*.class</exclude>
+                        <exclude>**/models/**/*.class</exclude>
+
+                        <!-- Specific directories -->
                         <exclude>**/com/frjgames/dal/ddb/items/*.class</exclude>
-                        <exclude>**/com/frjgames/dal/models/*.class</exclude>
                         <exclude>**/com/frjgames/dal/models/keys/*.class</exclude>
-                        <exclude>**/com/frjgames/app/password/models/*.class</exclude>
-                        <exclude>**/com/frjgames/app/sessions/models/*.class</exclude>
-                        <!-- Exceptions -->
-                        <exclude>**/com/frjgames/dal/exceptions/*.class</exclude>
-                        <!-- Configs -->
-                        <exclude>**/com/frjgames/app/config/*.class</exclude>
-                        <exclude>**/com/frjgames/dal/config/*.class</exclude>
 
                         <!-- Individual Classes -->
                         <exclude>**/com/frjgames/dal/ddb/accessors/BaseDynamoDbAccessor.class</exclude>

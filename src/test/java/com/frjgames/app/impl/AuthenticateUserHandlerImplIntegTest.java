@@ -4,10 +4,10 @@ import static org.junit.Assert.assertNotNull;
 
 import com.frjgames.app.api.AuthenticateUserHandler;
 import com.frjgames.app.api.CreateUserHandler;
-import com.frjgames.app.api.exceptions.InvalidAuthInputException;
-import com.frjgames.app.api.models.AuthenticateUserInput;
-import com.frjgames.app.api.models.AuthenticateUserOutput;
-import com.frjgames.app.api.models.CreateUserInput;
+import com.frjgames.app.api.models.exceptions.InvalidAuthInputException;
+import com.frjgames.app.api.models.inputs.AuthenticateUserInput;
+import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
+import com.frjgames.app.api.models.inputs.CreateUserInput;
 import com.frjgames.dal.config.TestDataAccessConfig;
 import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.items.UserSessionDdbItem;
@@ -54,14 +54,14 @@ public class AuthenticateUserHandlerImplIntegTest {
     public void authenticateUser() throws Exception {
         // Attempt when no user exists
         TestUtilExceptionValidator.validateThrown(InvalidAuthInputException.class,
-                () -> authenticateUserHandler.handleAuthenticateUser(AUTH_INPUT)
+                () -> authenticateUserHandler.handle(AUTH_INPUT)
         );
 
         // Create user
-        createUserHandler.handleCreateUser(CREATE_USER_INPUT);
+        createUserHandler.handle(CREATE_USER_INPUT);
 
         // Attempt with correct password
-        AuthenticateUserOutput output = authenticateUserHandler.handleAuthenticateUser(AUTH_INPUT);
+        AuthenticateUserOutput output = authenticateUserHandler.handle(AUTH_INPUT);
         assertNotNull(output.getSessionToken());
 
         // Attempt with incorrect password
@@ -70,7 +70,7 @@ public class AuthenticateUserHandlerImplIntegTest {
                 .password("incorrect-password")
                 .build();
         TestUtilExceptionValidator.validateThrown(InvalidAuthInputException.class,
-                () -> authenticateUserHandler.handleAuthenticateUser(inputWithIncorrectPassword)
+                () -> authenticateUserHandler.handle(inputWithIncorrectPassword)
         );
     }
 }

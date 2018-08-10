@@ -1,10 +1,10 @@
 package com.frjgames.app.impl;
 
 import com.frjgames.app.api.AuthenticateUserHandler;
-import com.frjgames.app.api.exceptions.InternalAppException;
-import com.frjgames.app.api.exceptions.InvalidAuthInputException;
-import com.frjgames.app.api.models.AuthenticateUserInput;
-import com.frjgames.app.api.models.AuthenticateUserOutput;
+import com.frjgames.app.api.models.exceptions.InternalAppException;
+import com.frjgames.app.api.models.exceptions.InvalidAuthInputException;
+import com.frjgames.app.api.models.inputs.AuthenticateUserInput;
+import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
 import com.frjgames.app.password.PasswordHasher;
 import com.frjgames.app.password.models.CannotPerformHashException;
 import com.frjgames.app.password.models.InvalidHashException;
@@ -36,7 +36,7 @@ public class AuthenticateUserHandlerImpl implements AuthenticateUserHandler {
      * It will also clear any other active sessions for that user.
      */
     @Override
-    public AuthenticateUserOutput handleAuthenticateUser(final AuthenticateUserInput input) throws InvalidAuthInputException, InternalAppException {
+    public AuthenticateUserOutput handle(final AuthenticateUserInput input) throws InvalidAuthInputException, InternalAppException {
         User user = loadUser(input.getUsername());
         validateAuthentication(input, user);
         SessionData session = createNewSessionToken(user);

@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-import com.frjgames.app.api.exceptions.InternalAppException;
-import com.frjgames.app.api.models.CreateUserInput;
-import com.frjgames.app.api.models.CreateUserOutput;
+import com.frjgames.app.api.models.exceptions.InternalAppException;
+import com.frjgames.app.api.models.inputs.CreateUserInput;
+import com.frjgames.app.api.models.outputs.CreateUserOutput;
 import com.frjgames.app.password.PasswordHasher;
 import com.frjgames.app.password.models.InvalidHashException;
 import com.frjgames.app.sessions.SessionManager;
@@ -19,6 +19,7 @@ import com.frjgames.app.utils.UniqueIdUtils;
 import com.frjgames.dal.models.User;
 import java.util.Optional;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -109,7 +110,7 @@ public class CreateUserHandlerImplTest {
     @Test
     public void handleCreateUser() throws Exception {
         // Method under test
-        CreateUserOutput output = target.handleCreateUser(input);
+        CreateUserOutput output = target.handle(input);
 
         // Validate
         CreateUserOutput expectedOutput = CreateUserOutput.builder()
@@ -133,7 +134,7 @@ public class CreateUserHandlerImplTest {
         when(injectedPasswordHasher.createStorableHash(PASSWORD)).thenThrow(new InvalidHashException("fake"));
 
         // Method under test
-        target.handleCreateUser(input);
+        target.handle(input);
     }
 
     @Test(expected = InternalAppException.class)
@@ -141,17 +142,17 @@ public class CreateUserHandlerImplTest {
         when(injectedPasswordHasher.createStorableHash(PASSWORD)).thenThrow(new CannotPerformHashException("fake"));
 
         // Method under test
-        target.handleCreateUser(input);
+        target.handle(input);
     }
 
     @Test
+    @Ignore("TODO - implement src, then this test")
     public void handleCreateUser_UsernameAlreadyExists() throws Exception {
-        // TODO - implement src, then this test
     }
 
     @Test
+    @Ignore("TODO - implement this, maybe as integ test")
     public void handleCreateUser_Idempotent() throws Exception {
-        // TODO - maybe this is better as integ test?
     }
 
 }

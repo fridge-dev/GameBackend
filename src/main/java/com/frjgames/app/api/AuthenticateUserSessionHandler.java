@@ -1,8 +1,8 @@
 package com.frjgames.app.api;
 
-import com.frjgames.app.api.exceptions.InvalidAuthInputException;
-import com.frjgames.app.api.models.AuthenticateUserSessionInput;
-import com.frjgames.app.api.models.AuthenticateUserSessionOutput;
+import com.frjgames.app.api.models.exceptions.InvalidAuthInputException;
+import com.frjgames.app.api.models.inputs.AuthenticateUserSessionInput;
+import com.frjgames.app.api.models.outputs.AuthenticateUserSessionOutput;
 
 /**
  * Top level API for authenticating a user's session token. This API is designed to be used before performing actions
@@ -10,8 +10,8 @@ import com.frjgames.app.api.models.AuthenticateUserSessionOutput;
  *
  * @author fridge
  */
-public interface AuthenticateUserSessionHandler {
+public interface AuthenticateUserSessionHandler extends ApiHandler {
 
-    AuthenticateUserSessionOutput handleAuthenticateUserSession(AuthenticateUserSessionInput input) throws InvalidAuthInputException;
+    AuthenticateUserSessionOutput handle(AuthenticateUserSessionInput input) throws InvalidAuthInputException;
 
 }

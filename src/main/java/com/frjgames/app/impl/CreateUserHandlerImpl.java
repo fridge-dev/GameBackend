@@ -1,9 +1,9 @@
 package com.frjgames.app.impl;
 
-import com.frjgames.app.api.models.CreateUserOutput;
+import com.frjgames.app.api.models.outputs.CreateUserOutput;
 import com.frjgames.app.api.CreateUserHandler;
-import com.frjgames.app.api.exceptions.InternalAppException;
-import com.frjgames.app.api.models.CreateUserInput;
+import com.frjgames.app.api.models.exceptions.InternalAppException;
+import com.frjgames.app.api.models.inputs.CreateUserInput;
 import com.frjgames.app.password.PasswordHasher;
 import com.frjgames.app.password.models.CannotPerformHashException;
 import com.frjgames.app.password.models.InvalidHashException;
@@ -35,7 +35,7 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
     /**
      * Handle request by creating user, then creating a session for that user.
      */
-    public CreateUserOutput handleCreateUser(final CreateUserInput input) throws InternalAppException {
+    public CreateUserOutput handle(final CreateUserInput input) throws InternalAppException {
         String username = input.getUsername();
         String password = input.getPassword();
 

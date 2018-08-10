@@ -1,4 +1,4 @@
-package com.frjgames.app.api.models;
+package com.frjgames.app.api.models.outputs;
 
 import com.frjgames.app.api.CreateUserHandler;
 import com.frjgames.app.sessions.models.SessionData;
