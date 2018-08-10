@@ -1,7 +1,7 @@
 package com.frjgames.app.api;
 
 import com.frjgames.app.api.models.exceptions.InternalAppException;
-import com.frjgames.app.api.models.exceptions.InvalidAuthInputException;
+import com.frjgames.app.api.models.exceptions.IncorrectAuthException;
 import com.frjgames.app.api.models.inputs.AuthenticateUserInput;
 import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
 
@@ -12,6 +12,6 @@ import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
  */
 public interface AuthenticateUserHandler extends ApiHandler {
 
-    AuthenticateUserOutput handle(AuthenticateUserInput input) throws InvalidAuthInputException, InternalAppException;
+    AuthenticateUserOutput handle(AuthenticateUserInput input) throws IncorrectAuthException, InternalAppException;
 
 }

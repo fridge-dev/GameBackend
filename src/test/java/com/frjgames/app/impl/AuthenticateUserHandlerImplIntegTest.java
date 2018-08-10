@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.frjgames.app.api.AuthenticateUserHandler;
 import com.frjgames.app.api.CreateUserHandler;
-import com.frjgames.app.api.models.exceptions.InvalidAuthInputException;
+import com.frjgames.app.api.models.exceptions.IncorrectAuthException;
 import com.frjgames.app.api.models.inputs.AuthenticateUserInput;
 import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
@@ -53,7 +53,7 @@ public class AuthenticateUserHandlerImplIntegTest {
     @Test
     public void authenticateUser() throws Exception {
         // Attempt when no user exists
-        TestUtilExceptionValidator.validateThrown(InvalidAuthInputException.class,
+        TestUtilExceptionValidator.validateThrown(IncorrectAuthException.class,
                 () -> authenticateUserHandler.handle(AUTH_INPUT)
         );
 
@@ -69,7 +69,7 @@ public class AuthenticateUserHandlerImplIntegTest {
                 .username(USERNAME)
                 .password("incorrect-password")
                 .build();
-        TestUtilExceptionValidator.validateThrown(InvalidAuthInputException.class,
+        TestUtilExceptionValidator.validateThrown(IncorrectAuthException.class,
                 () -> authenticateUserHandler.handle(inputWithIncorrectPassword)
         );
     }

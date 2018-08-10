@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.when;
 
-import com.frjgames.app.api.models.exceptions.InvalidAuthInputException;
+import com.frjgames.app.api.models.exceptions.IncorrectAuthException;
 import com.frjgames.app.api.models.inputs.AuthenticateUserInput;
 import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
 import com.frjgames.app.password.PasswordHasher;
@@ -74,14 +74,14 @@ public class AuthenticateUserHandlerImplTest {
         assertEquals(mockSession, output.getSessionToken());
     }
 
-    @Test(expected = InvalidAuthInputException.class)
+    @Test(expected = IncorrectAuthException.class)
     public void handleAuthenticateUser_UserNotFound() throws Exception {
         when(injectedUserAccessor.load(argThat(matchesUsername(USERNAME)))).thenReturn(Optional.empty());
 
         subject.handle(newInput());
     }
 
-    @Test(expected = InvalidAuthInputException.class)
+    @Test(expected = IncorrectAuthException.class)
     public void handleAuthenticateUser_InvalidPasswordInDatabase() throws Exception {
         when(injectedUserAccessor.load(argThat(matchesUsername(USERNAME)))).thenReturn(Optional.of(mockUser));
         when(injectedPasswordHasher.matches(CLIENT_PASSWORD, PERSISTED_PASSWORD)).thenThrow(new InvalidHashException("fake"));
@@ -89,7 +89,7 @@ public class AuthenticateUserHandlerImplTest {
         subject.handle(newInput());
     }
 
-    @Test(expected = InvalidAuthInputException.class)
+    @Test(expected = IncorrectAuthException.class)
     public void handleAuthenticateUser_InvalidPasswordProvided() throws Exception {
         when(injectedUserAccessor.load(argThat(matchesUsername(USERNAME)))).thenReturn(Optional.of(mockUser));
         when(injectedPasswordHasher.matches(CLIENT_PASSWORD, PERSISTED_PASSWORD)).thenReturn(false);
