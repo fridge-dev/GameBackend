@@ -19,9 +19,14 @@ public class SaveEverlastHighScoreInput {
     private final String username;
 
     /**
-     * The unique ID of the level.
+     * The number of the world.
      */
-    private final String levelId;
+    private final int worldNumber;
+
+    /**
+     * The number of the level, unique within the world.
+     */
+    private final int levelNumber;
 
     /**
      * The numeric score of the level execution.
