@@ -24,23 +24,23 @@ public class UserSessionDdbAccessorTest extends TestUtilDynamoDbAccessorTestBase
     }
 
     @Test
-    public void save() throws Exception {
+    public void createOrUpdate_Create() throws Exception {
         UserSessionDdbItem item = newItem();
 
-        accessor.save(item);
+        accessor.createOrUpdate(item);
     }
 
     @Test
-    public void save_CreateThenUpdate() throws Exception {
+    public void createOrUpdate_CreateThenUpdate() throws Exception {
         UserSessionDdbItem item = newItem();
 
-        accessor.save(item);
+        accessor.createOrUpdate(item);
 
         item.setSessionId(SESSION_ID + "newer-session");
         item.setExpirationTimestampMs(EXPIRY + 1234L);
 
         // It is allowed
-        accessor.save(item);
+        accessor.createOrUpdate(item);
     }
 
     @Test
@@ -50,10 +50,10 @@ public class UserSessionDdbAccessorTest extends TestUtilDynamoDbAccessorTestBase
         // Load nothing, create, then load
         assertFalse(accessor.load(item.getUserId()).isPresent());
 
-        accessor.save(item);
+        accessor.createOrUpdate(item);
 
         Optional<UserSessionDdbItem> loadedItem = accessor.load(item.getUserId());
-        assertEquals(item, loadedItem.get());
+        assertEquals(item, loadedItem.orElse(null));
     }
 
     private UserSessionDdbItem newItem() {

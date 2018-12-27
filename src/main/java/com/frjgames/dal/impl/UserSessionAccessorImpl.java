@@ -18,9 +18,12 @@ public class UserSessionAccessorImpl implements UserSessionAccessor {
 
     private final UserSessionDdbAccessor sessionDdbAccessor;
 
+    /**
+     * "Create" doesn't enforce no session already exists. It will overwrite any existing session.
+     */
     @Override
     public void create(final PersistedUserSession persistedUserSession) {
-        sessionDdbAccessor.save(domainTypeToItem(persistedUserSession));
+        sessionDdbAccessor.createOrUpdate(domainTypeToItem(persistedUserSession));
     }
 
     private UserSessionDdbItem domainTypeToItem(final PersistedUserSession persistedUserSession) {
@@ -32,6 +35,9 @@ public class UserSessionAccessorImpl implements UserSessionAccessor {
         return item;
     }
 
+    /**
+     * Load the session data.
+     */
     @Override
     public Optional<PersistedUserSession> load(final UserSessionDataKey key) {
         return sessionDdbAccessor.load(key.getUserId())

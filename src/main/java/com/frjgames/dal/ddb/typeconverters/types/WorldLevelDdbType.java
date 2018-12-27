@@ -12,7 +12,8 @@ import lombok.Data;
 @Builder
 public class WorldLevelDdbType {
 
-    private final int worldNumber;
+    private final String worldId;
 
-    private final int levelNumber;
+    private final String levelId;
+
 }

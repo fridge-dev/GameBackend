@@ -13,18 +13,18 @@ import lombok.Data;
 public class EverlastHighScoreDataKey implements AppDataKey {
 
     /**
-     * User's display name.
+     * The unique identifier of the user.
      */
-    private final String username;
+    private final String userId;
 
     /**
      * The unique identifier of the world.
      */
-    private final int worldId;
+    private final String worldId;
 
     /**
      * The unique identifier of the level.
      */
-    private final int levelId;
+    private final String levelId;
 
 }

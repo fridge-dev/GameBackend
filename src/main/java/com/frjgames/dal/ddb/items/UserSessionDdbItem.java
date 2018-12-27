@@ -16,7 +16,7 @@ public class UserSessionDdbItem implements DdbItem {
 
     public static final String TABLE_NAME = "UserSessions";
 
-    private static final String COL_USER_ID = "UserID";
+    public static final String COL_USER_ID = "UserID";
     private static final String COL_SESSION_ID = "SessionID";
     private static final String COL_EXPIRATION_TIMESTAMP_MS = "ExpirationTimestampMillis";
 

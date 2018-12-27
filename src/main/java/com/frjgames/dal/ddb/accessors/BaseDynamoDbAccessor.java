@@ -52,14 +52,14 @@ public abstract class BaseDynamoDbAccessor<T extends DdbItem> {
     /**
      * Delete item from DynamoDB
      */
-    protected void deleteObject(final T item) {
+    protected void deleteItem(final T item) {
         dbMapper.delete(item);
     }
 
     /**
      * Delete item from DynamoDB with an Expression
      */
-    protected void deleteObject(final T item, final DynamoDBDeleteExpression expression) {
+    protected void deleteItem(final T item, final DynamoDBDeleteExpression expression) {
         dbMapper.delete(item, expression);
     }
 
@@ -68,7 +68,7 @@ public abstract class BaseDynamoDbAccessor<T extends DdbItem> {
      * pagination pointer so that it can automatically and lazily fetch the next page when
      * needed (e.g. when using an Iterator).
      */
-    protected PaginatedQueryList<T> query(final DynamoDBQueryExpression<T> queryExpression) {
+    protected PaginatedQueryList<T> queryAllItems(final DynamoDBQueryExpression<T> queryExpression) {
         return dbMapper.query(clazz, queryExpression);
     }
 

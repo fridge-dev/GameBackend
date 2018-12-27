@@ -15,6 +15,8 @@
         <jacoco.threshold.line>0.80</jacoco.threshold.line>
         <jacoco.threshold.branch>0.80</jacoco.threshold.branch>
         <jacoco.threshold.complexity>0.80</jacoco.threshold.complexity>
+
+        <dependencies.jersey2.version>2.19</dependencies.jersey2.version>
     </properties>
 
     <build>
@@ -61,10 +63,12 @@
 
                         <!-- Specific directories -->
                         <exclude>**/com/frjgames/dal/ddb/items/*.class</exclude>
+                        <exclude>**/com/frjgames/dal/ddb/typeconverters/types/*.class</exclude>
                         <exclude>**/com/frjgames/dal/models/keys/*.class</exclude>
 
                         <!-- Individual Classes -->
                         <exclude>**/com/frjgames/dal/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
+                        <exclude>**/com/frjgames/dal/ddb/utils/PaginatedResultImpl.class</exclude>
                         <exclude>**/com/frjgames/app/password/PasswordModule.class</exclude>
                         <exclude>**/com/frjgames/app/sessions/SessionModule.class</exclude>
                     </excludes>
@@ -196,6 +200,30 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
             <version>1.4.0</version>
+        </dependency>
+
+        <!-- JAX-RS from https://howtodoinjava.com/jersey/jersey-2-hello-world-application-tutorial/ -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+        <!-- Jersey from https://howtodoinjava.com/jersey/jersey-2-hello-world-application-tutorial/ -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${dependencies.jersey2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${dependencies.jersey2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>${dependencies.jersey2.version}</version>
         </dependency>
 
     </dependencies>

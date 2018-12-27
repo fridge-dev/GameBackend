@@ -4,12 +4,10 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
-import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
+import com.frjgames.dal.ddb.utils.DdbExpressionFactory;
 import com.frjgames.dal.ddb.items.UserDdbItem;
-import com.google.common.collect.ImmutableMap;
 import com.frjgames.dal.exceptions.InvalidDataException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -27,9 +25,7 @@ public class UserDdbAccessor extends BaseDynamoDbAccessor<UserDdbItem> {
      * Save a user as long as no other user has had that username.
      */
     public void createUser(final UserDdbItem item) {
-        Map<String, ExpectedAttributeValue> expectUserDoesntExist = ImmutableMap.of(UserDdbItem.COL_USER_ID, new ExpectedAttributeValue(false));
-
-        DynamoDBSaveExpression saveCondition = new DynamoDBSaveExpression().withExpected(expectUserDoesntExist);
+        DynamoDBSaveExpression saveCondition = DdbExpressionFactory.newSaveExpressionItemDoesntExist(UserDdbItem.COL_USER_ID);
 
         super.saveItem(item, saveCondition);
     }

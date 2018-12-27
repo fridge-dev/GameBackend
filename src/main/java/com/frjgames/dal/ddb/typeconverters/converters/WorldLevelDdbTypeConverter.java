@@ -14,18 +14,18 @@ public class WorldLevelDdbTypeConverter implements DynamoDBTypeConverter<String,
 
     @Override
     public String convert(final WorldLevelDdbType worldLevelDdbType) {
-        return worldLevelDdbType.getWorldNumber() + SEPARATOR + worldLevelDdbType.getLevelNumber();
+        return worldLevelDdbType.getWorldId() + SEPARATOR + worldLevelDdbType.getLevelId();
     }
 
     @Override
     public WorldLevelDdbType unconvert(final String string) {
         String[] split = string.split(SEPARATOR);
-        int worldNumber = Integer.parseInt(split[0]);
-        int levelNumber = Integer.parseInt(split[1]);
+        String worldNumber = split[0];
+        String levelNumber = split[1];
 
         return WorldLevelDdbType.builder()
-                .worldNumber(worldNumber)
-                .levelNumber(levelNumber)
+                .worldId(worldNumber)
+                .levelId(levelNumber)
                 .build();
     }
 

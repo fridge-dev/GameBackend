@@ -16,14 +16,14 @@ public class UserSessionDdbAccessor extends BaseDynamoDbAccessor<UserSessionDdbI
     }
 
     /**
-     * Save a user as long as no other user has had that username.
+     * Put a new session.
      */
-    public void save(final UserSessionDdbItem item) {
+    public void createOrUpdate(final UserSessionDdbItem item) {
         super.saveItem(item);
     }
 
     /**
-     * Loads user item from unique user ID
+     * Loads session item from unique user ID
      */
     public Optional<UserSessionDdbItem> load(final String userId) {
         return super.loadItem(userId);

@@ -16,9 +16,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class WorldLevelDdbTypeConverterTest {
 
+    private static final String CONVERTED_WORLD_LEVEL = "1234-hello::2345-hello";
     private static final WorldLevelDdbType WORLD_LEVEL = WorldLevelDdbType.builder()
-            .worldNumber(1234)
-            .levelNumber(2345)
+            .worldId("1234-hello")
+            .levelId("2345-hello")
             .build();
 
     private WorldLevelDdbTypeConverter converter = new WorldLevelDdbTypeConverter();
@@ -36,11 +37,11 @@ public class WorldLevelDdbTypeConverterTest {
     public void convert() throws Exception {
         String converted = converter.convert(WORLD_LEVEL);
 
-        assertEquals("1234::2345", converted);
+        assertEquals(CONVERTED_WORLD_LEVEL, converted);
     }
     @Test
     public void unconvert() throws Exception {
-        WorldLevelDdbType worldLevel = converter.unconvert("1234::2345");
+        WorldLevelDdbType worldLevel = converter.unconvert(CONVERTED_WORLD_LEVEL);
 
         assertEquals(WORLD_LEVEL, worldLevel);
     }

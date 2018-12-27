@@ -67,5 +67,4 @@ import lombok.Synchronized;
                 .withConsistentReads(ConsistentReads.EVENTUAL)
                 .build();
     }
-
 }

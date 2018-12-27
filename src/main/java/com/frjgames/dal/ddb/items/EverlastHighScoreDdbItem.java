@@ -1,6 +1,7 @@
 package com.frjgames.dal.ddb.items;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
@@ -22,7 +23,7 @@ public class EverlastHighScoreDdbItem implements DdbItem {
     public static final String TABLE_NAME = "Everlast-HighScores";
     public static final String INDEX_LEVEL_ID_SCORE = "GSI-LevelID-Score";
 
-    private static final String COL_USERNAME = "Username";
+    private static final String COL_USER_ID = "UserID";
     private static final String COL_PASSWORD = "Password";
     private static final String COL_LEVEL_ID = "LevelID";
     private static final String COL_SCORE = "LevelScore";
@@ -30,10 +31,10 @@ public class EverlastHighScoreDdbItem implements DdbItem {
     private static final String COL_TIMESTAMP = "Timestamp";
 
     /**
-     * User's display name.
+     * User's unique ID.
      */
-    @DynamoDBAttribute(attributeName = COL_USERNAME)
-    private String username;
+    @DynamoDBHashKey(attributeName = COL_USER_ID)
+    private String userId;
 
     /**
      * The unique identifier of the level.
@@ -41,7 +42,7 @@ public class EverlastHighScoreDdbItem implements DdbItem {
     @DynamoDBRangeKey(attributeName = COL_LEVEL_ID)
     @DynamoDBTypeConverted(converter = WorldLevelDdbTypeConverter.class)
     @DynamoDBIndexHashKey(globalSecondaryIndexName = INDEX_LEVEL_ID_SCORE)
-    private WorldLevelDdbType levelId;
+    private WorldLevelDdbType worldAndLevelId;
 
     /**
      * The numeric score of the high score.
