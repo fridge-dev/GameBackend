@@ -2,22 +2,27 @@ package com.frjgames.dal.models;
 
 import java.util.List;
 import java.util.Optional;
+import lombok.Data;
 
 /**
- * Represents a page of results in a paginated call pattern.
+ * A simple POJO implementation.
  *
  * @author fridge
  */
-public interface PaginatedResult<T> {
+@Data
+public class PaginatedResult<T> {
 
     /**
      * A single page of results.
      */
-    List<T> getResults();
+    private final List<T> results;
 
     /**
      * The pagination token to be used on the next request.
      */
-    Optional<String> getPaginationToken();
+    private final String paginationToken;
 
+    public Optional<String> getPaginationToken() {
+        return Optional.ofNullable(this.paginationToken);
+    }
 }

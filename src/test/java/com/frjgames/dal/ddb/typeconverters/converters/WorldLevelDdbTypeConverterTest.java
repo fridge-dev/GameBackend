@@ -3,7 +3,7 @@ package com.frjgames.dal.ddb.typeconverters.converters;
 import static org.junit.Assert.assertEquals;
 
 import com.frjgames.dal.ddb.typeconverters.types.WorldLevelDdbType;
-import com.frjgames.testutils.TestUtilDynamoDbTypeConverterValidator;
+import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbTypeConverterValidator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;

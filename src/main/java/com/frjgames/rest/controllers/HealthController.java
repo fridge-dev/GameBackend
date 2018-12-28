@@ -1,4 +1,4 @@
-package com.frjgames.rest;
+package com.frjgames.rest.controllers;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

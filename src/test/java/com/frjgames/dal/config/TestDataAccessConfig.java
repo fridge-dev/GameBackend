@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class TestDataAccessConfig extends DataAccessConfig {
 
-    private final LocalDynamoDbConfig localDdbConfig;
+    private final LocalDynamoDbConfig localDdbConfig = new LocalDynamoDbConfig();
 
     @SafeVarargs
     public TestDataAccessConfig(final Class<? extends DdbItem>... tablesToCreate) {
@@ -22,7 +22,6 @@ public class TestDataAccessConfig extends DataAccessConfig {
     public TestDataAccessConfig(final List<Class<? extends DdbItem>> tablesToCreate) {
         super(null, null);
 
-        this.localDdbConfig = new LocalDynamoDbConfig();
         super.setDynamoDbConfig(localDdbConfig);
 
         for (Class<? extends DdbItem> clazz : tablesToCreate) {

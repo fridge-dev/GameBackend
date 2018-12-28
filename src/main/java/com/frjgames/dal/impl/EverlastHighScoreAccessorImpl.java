@@ -3,19 +3,22 @@ package com.frjgames.dal.impl;
 import static java.util.stream.Collectors.toList;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.frjgames.dal.ddb.accessors.EverlastHighScoreDdbAccessor;
 import com.frjgames.dal.ddb.items.EverlastHighScoreDdbItem;
 import com.frjgames.dal.ddb.typeconverters.types.WorldLevelDdbType;
+import com.frjgames.dal.ddb.utils.DdbPaginationMapper;
 import com.frjgames.dal.interfaces.EverlastHighScoreAccessor;
 import com.frjgames.dal.models.EverlastHighScore;
 import com.frjgames.dal.models.PaginatedResult;
 import com.frjgames.dal.models.keys.EverlastHighScoreDataKey;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 /**
- * TODO
+ * This class is responsible for accessing data from the EverlastHighScore data store.
  *
  * @author fridge
  */
@@ -85,14 +88,9 @@ public class EverlastHighScoreAccessorImpl implements EverlastHighScoreAccessor 
                 .levelId(levelId)
                 .build();
 
-        QueryResultPage<EverlastHighScoreDdbItem> resultPage = accessor.loadHighScoresForLevel(worldAndLevelId);
+        Map<String, AttributeValue> exclusiveStartKey = DdbPaginationMapper.extractLastEvaluatedKey(paginationToken).orElse(null);
+        QueryResultPage<EverlastHighScoreDdbItem> resultPage = accessor.loadHighScoresForLevel(worldAndLevelId, exclusiveStartKey);
 
-        List<EverlastHighScore> collect = resultPage.getResults()
-                .stream()
-                .map(this::itemToDomainType)
-                .collect(toList());
-
-        resultPage.getLastEvaluatedKey();
-        return null;
+        return DdbPaginationMapper.makePaginatedResult(resultPage, this::itemToDomainType);
     }
 }

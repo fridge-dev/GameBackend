@@ -1,10 +1,13 @@
 package com.frjgames.dal.config;
 
+import com.frjgames.dal.ddb.accessors.EverlastHighScoreDdbAccessor;
 import com.frjgames.dal.ddb.accessors.UserDdbAccessor;
 import com.frjgames.dal.ddb.accessors.UserSessionDdbAccessor;
+import com.frjgames.dal.impl.EverlastHighScoreAccessorImpl;
 import com.frjgames.dal.impl.UserAccessorImpl;
 import com.frjgames.dal.impl.UserSessionAccessorImpl;
 import com.frjgames.dal.interfaces.DataAccessorProvider;
+import com.frjgames.dal.interfaces.EverlastHighScoreAccessor;
 import com.frjgames.dal.interfaces.UserAccessor;
 import com.frjgames.dal.interfaces.UserSessionAccessor;
 import lombok.AccessLevel;
@@ -40,6 +43,11 @@ public class DataAccessConfig implements DataAccessorProvider {
     @Override
     public UserSessionAccessor userSessionAccessor() {
         return new UserSessionAccessorImpl(new UserSessionDdbAccessor(dynamoDbConfig().dynamoDBMapper()));
+    }
+
+    @Override
+    public EverlastHighScoreAccessor everlastHighScoreAccessor() {
+        return new EverlastHighScoreAccessorImpl(new EverlastHighScoreDdbAccessor(dynamoDbConfig().dynamoDBMapper()));
     }
 
     @Synchronized

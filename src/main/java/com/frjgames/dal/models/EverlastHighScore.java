@@ -9,7 +9,7 @@ import lombok.Data;
  * @author fridge
  */
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class EverlastHighScore implements AppDataModel {
 
     /**

@@ -87,7 +87,7 @@ public class EverlastHighScoreDdbAccessorTest extends TestUtilDynamoDbAccessorTe
                 .worldId("world-0002")
                 .levelId("level-0003")
                 .build();
-        QueryResultPage<EverlastHighScoreDdbItem> resultPage = accessor.loadHighScoresForLevel(level);
+        QueryResultPage<EverlastHighScoreDdbItem> resultPage = accessor.loadHighScoresForLevel(level, null);
 
         // Assert scores are ordered in descending order.
         int highestScore = 10000000;
@@ -155,5 +155,4 @@ public class EverlastHighScoreDdbAccessorTest extends TestUtilDynamoDbAccessorTe
 
         return item;
     }
-
 }

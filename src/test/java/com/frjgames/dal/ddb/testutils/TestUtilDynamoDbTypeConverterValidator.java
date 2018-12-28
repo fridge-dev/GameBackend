@@ -1,4 +1,4 @@
-package com.frjgames.testutils;
+package com.frjgames.dal.ddb.testutils;
 
 import static org.junit.Assert.assertEquals;
 

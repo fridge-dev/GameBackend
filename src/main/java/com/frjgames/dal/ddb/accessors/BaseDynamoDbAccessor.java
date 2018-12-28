@@ -22,17 +22,17 @@ public abstract class BaseDynamoDbAccessor<T extends DdbItem> {
     private Class<T> clazz;
 
     /**
-     * Load item from DynamoDB using key
+     * Load item from DynamoDB using hashKey
      */
-    protected Optional<T> loadItem(final Object key) {
-        return Optional.ofNullable(dbMapper.load(clazz, key));
+    protected Optional<T> loadItem(final Object hashKey) {
+        return Optional.ofNullable(dbMapper.load(clazz, hashKey));
     }
 
     /**
-     * Load item from DynamoDB using key and range
+     * Load item from DynamoDB using hashKey and rangeKey
      */
-    protected Optional<T> loadItem(final Object key, final Object range) {
-        return Optional.ofNullable(dbMapper.load(clazz, key, range));
+    protected Optional<T> loadItem(final Object hashKey, final Object rangeKey) {
+        return Optional.ofNullable(dbMapper.load(clazz, hashKey, rangeKey));
     }
 
     /**
@@ -45,7 +45,7 @@ public abstract class BaseDynamoDbAccessor<T extends DdbItem> {
     /**
      * Save item to DynamoDB with an Expression
      */
-    protected void saveItem(T item, DynamoDBSaveExpression expression) {
+    protected void saveItem(final T item, final DynamoDBSaveExpression expression) {
         dbMapper.save(item, expression);
     }
 

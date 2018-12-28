@@ -4,10 +4,12 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.frjgames.dal.ddb.items.EverlastHighScoreDdbItem;
 import com.frjgames.dal.ddb.typeconverters.types.WorldLevelDdbType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -55,7 +57,10 @@ public class EverlastHighScoreDdbAccessor extends BaseDynamoDbAccessor<EverlastH
     /**
      * Get the top high scores for a specific level.
      */
-    public QueryResultPage<EverlastHighScoreDdbItem> loadHighScoresForLevel(final WorldLevelDdbType worldLevelId) {
+    public QueryResultPage<EverlastHighScoreDdbItem> loadHighScoresForLevel(
+            final WorldLevelDdbType worldLevelId,
+            final Map<String, AttributeValue> exclusiveStartKey
+    ) {
         EverlastHighScoreDdbItem key = new EverlastHighScoreDdbItem();
         key.setWorldAndLevelId(worldLevelId);
 
@@ -63,7 +68,8 @@ public class EverlastHighScoreDdbAccessor extends BaseDynamoDbAccessor<EverlastH
                 .withIndexName(EverlastHighScoreDdbItem.INDEX_LEVEL_ID_SCORE)
                 .withHashKeyValues(key)
                 .withConsistentRead(false) // GSI can't read consistently
-                .withScanIndexForward(false);
+                .withScanIndexForward(false)
+                .withExclusiveStartKey(exclusiveStartKey);
 
         return super.querySinglePage(query);
     }

@@ -8,7 +8,7 @@ package com.frjgames.dal.exceptions;
  *
  * @author fridge
  */
-public class InvalidDataException extends RuntimeException {
+public class InvalidDataException extends DataAccessLayerException {
 
     public InvalidDataException(final String message) {
         super(message);

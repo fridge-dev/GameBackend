@@ -11,4 +11,5 @@ public interface DataAccessorProvider {
 
     UserSessionAccessor userSessionAccessor();
 
+    EverlastHighScoreAccessor everlastHighScoreAccessor();
 }

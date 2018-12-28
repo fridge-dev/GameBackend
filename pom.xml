@@ -68,9 +68,9 @@
 
                         <!-- Individual Classes -->
                         <exclude>**/com/frjgames/dal/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
-                        <exclude>**/com/frjgames/dal/ddb/utils/PaginatedResultImpl.class</exclude>
                         <exclude>**/com/frjgames/app/password/PasswordModule.class</exclude>
                         <exclude>**/com/frjgames/app/sessions/SessionModule.class</exclude>
+                        <exclude>**/com/frjgames/rest/Application.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

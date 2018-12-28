@@ -36,7 +36,6 @@ public final class TestUtilDynamoDbTableCreator {
             final long rcu,
             final long wcu
     ) {
-
         CreateTableRequest tableRequest = dynamoDbMapper.generateCreateTableRequest(clazz).withProvisionedThroughput(new ProvisionedThroughput(rcu, wcu));
 
         deleteTableIfExists(dynamoDb, tableRequest.getTableName());
