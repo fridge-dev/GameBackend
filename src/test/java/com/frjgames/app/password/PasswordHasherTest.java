@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
- * Tests the {@link PasswordHasher} class.
+ * Tests the {@link PasswordHasherImpl} class.
  *
  * @author fridge
  */
@@ -29,7 +29,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class PasswordHasherTest {
 
     @InjectMocks
-    private PasswordHasher passwordHasher;
+    private PasswordHasherImpl passwordHasher;
 
     @Mock
     private PasswordHashingAlgorithm injectedPasswordHashingAlgorithm;

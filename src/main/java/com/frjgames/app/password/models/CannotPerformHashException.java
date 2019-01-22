@@ -1,9 +1,9 @@
 package com.frjgames.app.password.models;
 
-import com.frjgames.app.password.PasswordHasher;
+import com.frjgames.app.password.PasswordHasherImpl;
 
 /**
- * Exception thrown when {@link PasswordHasher} fails to perform a hash.
+ * Exception thrown when {@link PasswordHasherImpl} fails to perform a hash.
  *
  * @author fridge
  */

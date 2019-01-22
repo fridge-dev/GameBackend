@@ -1,10 +1,10 @@
 package com.frjgames.app.password.models;
 
-import com.frjgames.app.password.PasswordHasher;
+import com.frjgames.app.password.PasswordHasherImpl;
 
 /**
  * Kind of like {@link IllegalArgumentException} when providing a hash to the
- * {@link PasswordHasher} for verification.
+ * {@link PasswordHasherImpl} for verification.
  *
  * @author fridge
  */

@@ -17,7 +17,7 @@ public class PasswordModule {
     @Synchronized
     public PasswordHasher passwordHasher() {
         if (passwordHasher == null) {
-            passwordHasher = new PasswordHasher(passwordHashingAlgorithm(), new HashParamsEncoder());
+            passwordHasher = new PasswordHasherImpl(passwordHashingAlgorithm(), new HashParamsEncoder());
         }
 
         return passwordHasher;

@@ -14,7 +14,7 @@ import lombok.Synchronized;
  *
  * @author fridge
  */
-public class ApiHandlerConfiguration {
+public class ApiHandlerModule {
 
     /**
      * Dependencies
@@ -33,7 +33,7 @@ public class ApiHandlerConfiguration {
     /**
      * Instantiate all application layer modules with the low level modules.
      */
-    public ApiHandlerConfiguration(final DataAccessLayerModule dataAccessLayerModule) {
+    public ApiHandlerModule(final DataAccessLayerModule dataAccessLayerModule) {
         this.dataAccessLayerModule = dataAccessLayerModule;
         this.sessionModule = new SessionModule(dataAccessLayerModule.userSessionAccessor());
     }

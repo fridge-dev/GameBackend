@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import com.frjgames.app.api.models.exceptions.InternalAppException;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
 import com.frjgames.app.api.models.outputs.CreateUserOutput;
-import com.frjgames.app.password.PasswordHasher;
+import com.frjgames.app.password.PasswordHasherImpl;
 import com.frjgames.app.password.models.InvalidHashException;
 import com.frjgames.app.sessions.SessionManager;
 import com.frjgames.dal.models.interfaces.UserAccessor;
@@ -53,7 +53,7 @@ public class CreateUserHandlerImplTest {
     private SessionManager injectedSessionManager;
 
     @Mock
-    private PasswordHasher injectedPasswordHasher;
+    private PasswordHasherImpl injectedPasswordHasher;
 
     @Mock
     private SessionData mockSession;

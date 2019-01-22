@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Functional integ test for {@link PasswordHasher} class.
+ * Functional integ test for {@link PasswordHasherImpl} class.
  *
  * @author fridge
  */

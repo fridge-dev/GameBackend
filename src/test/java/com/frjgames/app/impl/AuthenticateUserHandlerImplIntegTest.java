@@ -47,10 +47,10 @@ public class AuthenticateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalT
 
     @Before
     public void setup() {
-        ApiHandlerConfiguration apiHandlerConfiguration = new ApiHandlerConfiguration(getModule());
+        ApiHandlerModule apiHandlerModule = new ApiHandlerModule(getModule());
 
-        authenticateUserHandler = apiHandlerConfiguration.getAuthenticateUserHandler();
-        createUserHandler = apiHandlerConfiguration.getCreateUserHandler();
+        authenticateUserHandler = apiHandlerModule.getAuthenticateUserHandler();
+        createUserHandler = apiHandlerModule.getCreateUserHandler();
     }
 
     @Test
