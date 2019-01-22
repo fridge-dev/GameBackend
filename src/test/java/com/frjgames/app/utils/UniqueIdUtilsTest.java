@@ -9,7 +9,7 @@ import org.junit.Test;
 /**
  * Tests the {@link UniqueIdUtils} class.
  *
- * @author alecva
+ * @author fridge
  */
 public class UniqueIdUtilsTest {
 

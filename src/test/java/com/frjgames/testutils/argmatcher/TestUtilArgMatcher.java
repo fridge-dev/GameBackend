@@ -11,7 +11,7 @@ import org.mockito.ArgumentMatcher;
  *     Matcher<MyType> myCustomMatcher = new TestUtilArgMatcher<>(invoked -> invoked.getData().equals(expectedData));
  * </code>
  *
- * @author alecva
+ * @author fridge
  */
 @RequiredArgsConstructor
 public class TestUtilArgMatcher<T> extends ArgumentMatcher<T> {

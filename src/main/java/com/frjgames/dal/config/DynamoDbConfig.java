@@ -3,63 +3,47 @@ package com.frjgames.dal.config;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig.ConsistentReads;
-import lombok.AccessLevel;
+import com.frjgames.dal.ddb.accessors.tablemgmt.FrjDynamoDbMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.Synchronized;
 
 /**
- * This config is responsible for creating the AWS DynamoDB client instance.
+ * This config is responsible for configuring and creating the AWS DynamoDB client SDK instances.
  *
  * @author fridge
  */
-@RequiredArgsConstructor
-/* pkg */ class DynamoDbConfig {
+@RequiredArgsConstructor // Constructor only meant to support DynamoDBLocal
+/* NOT PUBLIC */ class DynamoDbConfig {
 
     /**
      * Dependencies
      */
-    private final String awsRegion;
-    private final String awsKey;
+    private final AmazonDynamoDB amazonDynamoDB;
 
     /**
      * Lazy singletons
      */
-    private DynamoDBMapper dynamoDBMapper;
-
-    @Setter(AccessLevel.PACKAGE)
-    private AmazonDynamoDB amazonDynamoDB;
+    private FrjDynamoDbMapper dynamoDBMapper;
 
     /**
-     * If this isn't lazily created, then UTs cannot override the Local DB via Setter.
+     * Constructor for connecting to live DB.
      */
+    public DynamoDbConfig(final String awsRegion, final AWSCredentialsProvider awsCredentials) {
+        this.amazonDynamoDB = AmazonDynamoDBClient.builder()
+                .withRegion(awsRegion)
+                .withCredentials(awsCredentials)
+                .build();
+    }
+
     @Synchronized
-    public DynamoDBMapper dynamoDBMapper() {
+    public FrjDynamoDbMapper dynamoDBMapper() {
         if (dynamoDBMapper == null) {
-            dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB(), getDdbClientConfig());
+            dynamoDBMapper = new FrjDynamoDbMapperImpl(this.amazonDynamoDB, getDdbClientConfig());
         }
 
         return dynamoDBMapper;
-    }
-
-    private AmazonDynamoDB amazonDynamoDB() {
-        if (amazonDynamoDB == null) {
-            amazonDynamoDB = AmazonDynamoDBClient.builder()
-                    .withRegion(awsRegion)
-                    .withCredentials(getAwsCredentials())
-                    .build();
-        }
-
-        return amazonDynamoDB;
-    }
-
-    // Consider moving this to generic AWS config if onboarded with more services.
-    private AWSCredentialsProvider getAwsCredentials() {
-        // TODO use #awsKey somehow.
-        return null;
     }
 
     private DynamoDBMapperConfig getDdbClientConfig() {

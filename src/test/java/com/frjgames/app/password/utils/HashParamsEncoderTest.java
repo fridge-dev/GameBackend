@@ -16,7 +16,7 @@ import org.junit.Test;
 /**
  * Tests the {@link HashParamsEncoder} class.
  *
- * @author alecva
+ * @author fridge
  */
 public class HashParamsEncoderTest {
 

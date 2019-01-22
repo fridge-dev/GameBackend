@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.SimpleType;
-import com.frjgames.dal.exceptions.DataSerializationException;
-import com.frjgames.dal.models.PaginatedResult;
+import com.frjgames.dal.models.exceptions.DataSerializationException;
+import com.frjgames.dal.models.data.PaginatedResult;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +71,7 @@ public class DdbPaginationMapper {
         try {
             return OBJECT_MAPPER.writeValueAsString(lastEvaluatedKey);
         } catch (JsonProcessingException e) {
-            throw new DataSerializationException("Failed to create pagination token.");
+            throw new DataSerializationException("Failed to create pagination token.", e);
         }
     }
 }

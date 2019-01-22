@@ -7,8 +7,8 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.frjgames.dal.interfaces.UserSessionAccessor;
-import com.frjgames.dal.models.PersistedUserSession;
+import com.frjgames.dal.models.interfaces.UserSessionAccessor;
+import com.frjgames.dal.models.data.PersistedUserSession;
 import com.frjgames.app.sessions.models.CreateSessionInput;
 import com.frjgames.app.sessions.models.SessionData;
 import com.frjgames.dal.models.keys.UserSessionDataKey;
@@ -27,7 +27,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 /**
  * Tests the {@link RngSessionManager} class.
  *
- * @author alecva
+ * @author fridge
  */
 @RunWith(MockitoJUnitRunner.class)
 public class RngSessionManagerTest {

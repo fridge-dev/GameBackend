@@ -1,6 +1,6 @@
 package com.frjgames.dal.models.keys;
 
-import com.frjgames.dal.interfaces.DataAccessor;
+import com.frjgames.dal.models.interfaces.DataAccessor;
 
 /**
  * Qualifier interface for {@link DataAccessor} unique keys.

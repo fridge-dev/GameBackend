@@ -1,8 +1,8 @@
 package com.frjgames.app.sessions;
 
 import com.frjgames.app.sessions.models.SessionData;
-import com.frjgames.dal.interfaces.UserSessionAccessor;
-import com.frjgames.dal.models.PersistedUserSession;
+import com.frjgames.dal.models.interfaces.UserSessionAccessor;
+import com.frjgames.dal.models.data.PersistedUserSession;
 import com.frjgames.dal.models.keys.UserSessionDataKey;
 import com.frjgames.app.sessions.models.CreateSessionInput;
 import java.security.SecureRandom;

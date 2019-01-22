@@ -7,7 +7,7 @@ import com.frjgames.testutils.interfaces.RunnableThrows;
 /**
  * A test utility for all validations related to exceptions.
  *
- * @author alecva
+ * @author fridge
  */
 public class TestUtilExceptionValidator {
 

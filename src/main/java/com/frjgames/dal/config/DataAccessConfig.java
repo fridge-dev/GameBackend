@@ -1,61 +1,46 @@
 package com.frjgames.dal.config;
 
-import com.frjgames.dal.ddb.accessors.EverlastHighScoreDdbAccessor;
-import com.frjgames.dal.ddb.accessors.UserDdbAccessor;
-import com.frjgames.dal.ddb.accessors.UserSessionDdbAccessor;
-import com.frjgames.dal.impl.EverlastHighScoreAccessorImpl;
-import com.frjgames.dal.impl.UserAccessorImpl;
-import com.frjgames.dal.impl.UserSessionAccessorImpl;
-import com.frjgames.dal.interfaces.DataAccessorProvider;
-import com.frjgames.dal.interfaces.EverlastHighScoreAccessor;
-import com.frjgames.dal.interfaces.UserAccessor;
-import com.frjgames.dal.interfaces.UserSessionAccessor;
-import lombok.AccessLevel;
+import com.frjgames.dal.accessors.EverlastHighScoreAccessorImplV2;
+import com.frjgames.dal.accessors.UserAccessorImplV2;
+import com.frjgames.dal.accessors.UserSessionAccessorImplV2;
+import com.frjgames.dal.ddb.accessors.DynamoDbAccessor;
+import com.frjgames.dal.ddb.accessors.tablemgmt.FrjDynamoDbMapper;
+import com.frjgames.dal.ddb.items.EverlastHighScoreDdbItem;
+import com.frjgames.dal.ddb.items.UserDdbItem;
+import com.frjgames.dal.ddb.items.UserSessionDdbItem;
+import com.frjgames.dal.models.interfaces.EverlastHighScoreAccessor;
+import com.frjgames.dal.models.interfaces.UserAccessor;
+import com.frjgames.dal.models.interfaces.UserSessionAccessor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.Synchronized;
+import lombok.experimental.Accessors;
 
 /**
- * Configuration for the Data Access Layer.
+ * Configuration for the Data Access Layer, using DynamoDB SDK.
  *
  * @author fridge
  */
 @RequiredArgsConstructor
-public class DataAccessConfig implements DataAccessorProvider {
+@Accessors(fluent = true)
+/* pkg */ class DataAccessConfig implements DataAccessLayerModule {
 
     /**
      * Dependencies
      */
-    private final String awsRegion;
-    private final String awsKey;
+    private final FrjDynamoDbMapper dynamoDBMapper;
 
-    /**
-     * Lazy singletons
-     */
-    @Setter(AccessLevel.PACKAGE)
-    private DynamoDbConfig dynamoDbConfig;
+    @Getter(lazy = true)
+    private final UserAccessor userAccessor = new UserAccessorImplV2(
+            new DynamoDbAccessor<>(dynamoDBMapper, UserDdbItem.class)
+    );
 
-    @Override
-    public UserAccessor userAccessor() {
-        return new UserAccessorImpl(new UserDdbAccessor(dynamoDbConfig().dynamoDBMapper()));
-    }
+    @Getter(lazy = true)
+    private final UserSessionAccessor userSessionAccessor = new UserSessionAccessorImplV2(
+            new DynamoDbAccessor<>(dynamoDBMapper, UserSessionDdbItem.class)
+    );
 
-    @Override
-    public UserSessionAccessor userSessionAccessor() {
-        return new UserSessionAccessorImpl(new UserSessionDdbAccessor(dynamoDbConfig().dynamoDBMapper()));
-    }
-
-    @Override
-    public EverlastHighScoreAccessor everlastHighScoreAccessor() {
-        return new EverlastHighScoreAccessorImpl(new EverlastHighScoreDdbAccessor(dynamoDbConfig().dynamoDBMapper()));
-    }
-
-    @Synchronized
-    private DynamoDbConfig dynamoDbConfig() {
-        if (this.dynamoDbConfig == null) {
-            this.dynamoDbConfig = new DynamoDbConfig(awsRegion, awsKey);
-        }
-
-        return this.dynamoDbConfig;
-    }
+    @Getter(lazy = true)
+    private final EverlastHighScoreAccessor everlastHighScoreAccessor = new EverlastHighScoreAccessorImplV2(
+            new DynamoDbAccessor<>(dynamoDBMapper, EverlastHighScoreDdbItem.class)
+    );
 }

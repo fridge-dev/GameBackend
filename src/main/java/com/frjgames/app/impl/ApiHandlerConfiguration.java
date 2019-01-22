@@ -6,7 +6,7 @@ import com.frjgames.app.api.CreateUserHandler;
 import com.frjgames.app.password.PasswordModule;
 import com.frjgames.app.sessions.SessionModule;
 import com.frjgames.app.utils.UniqueIdUtils;
-import com.frjgames.dal.interfaces.DataAccessorProvider;
+import com.frjgames.dal.config.DataAccessLayerModule;
 import lombok.Synchronized;
 
 /**
@@ -19,7 +19,7 @@ public class ApiHandlerConfiguration {
     /**
      * Dependencies
      */
-    private final DataAccessorProvider dataAccessorProvider;
+    private final DataAccessLayerModule dataAccessLayerModule;
     private final UniqueIdUtils uniqueIdUtils = UniqueIdUtils.getInstance();
     private final SessionModule sessionModule;
     private final PasswordModule passwordModule = new PasswordModule();
@@ -33,9 +33,9 @@ public class ApiHandlerConfiguration {
     /**
      * Instantiate all application layer modules with the low level modules.
      */
-    public ApiHandlerConfiguration(final DataAccessorProvider dataAccessorProvider) {
-        this.dataAccessorProvider = dataAccessorProvider;
-        this.sessionModule = new SessionModule(dataAccessorProvider.userSessionAccessor());
+    public ApiHandlerConfiguration(final DataAccessLayerModule dataAccessLayerModule) {
+        this.dataAccessLayerModule = dataAccessLayerModule;
+        this.sessionModule = new SessionModule(dataAccessLayerModule.userSessionAccessor());
     }
 
     @Synchronized
@@ -43,7 +43,7 @@ public class ApiHandlerConfiguration {
         if (createUserHandlerSingleton == null) {
             createUserHandlerSingleton = new CreateUserHandlerImpl(
                     uniqueIdUtils,
-                    dataAccessorProvider.userAccessor(),
+                    dataAccessLayerModule.userAccessor(),
                     sessionModule.sessionManager(),
                     passwordModule.passwordHasher()
             );
@@ -56,7 +56,7 @@ public class ApiHandlerConfiguration {
     public AuthenticateUserHandler getAuthenticateUserHandler() {
         if (authenticateUserHandlerSingleton == null) {
             authenticateUserHandlerSingleton = new AuthenticateUserHandlerImpl(
-                    dataAccessorProvider.userAccessor(),
+                    dataAccessLayerModule.userAccessor(),
                     sessionModule.sessionManager(),
                     passwordModule.passwordHasher()
             );

@@ -6,11 +6,11 @@ import com.frjgames.app.api.AuthenticateUserHandler;
 import com.frjgames.app.api.CreateUserHandler;
 import com.frjgames.app.api.models.exceptions.IncorrectAuthException;
 import com.frjgames.app.api.models.inputs.AuthenticateUserInput;
-import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
-import com.frjgames.dal.config.TestDataAccessConfig;
+import com.frjgames.app.api.models.outputs.AuthenticateUserOutput;
 import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.items.UserSessionDdbItem;
+import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbLocalTestBase;
 import com.frjgames.testutils.TestUtilExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author fridge
  */
 @RunWith(MockitoJUnitRunner.class)
-public class AuthenticateUserHandlerImplIntegTest {
+public class AuthenticateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBase {
 
     private static final String USERNAME = "lsiuhgralsguhr";
     private static final String PASSWORD = "9f127hl2hi4f12of4";
@@ -41,10 +41,13 @@ public class AuthenticateUserHandlerImplIntegTest {
     private AuthenticateUserHandler authenticateUserHandler;
     private CreateUserHandler createUserHandler;
 
+    public AuthenticateUserHandlerImplIntegTest() {
+        super(UserDdbItem.class, UserSessionDdbItem.class);
+    }
+
     @Before
     public void setup() {
-        TestDataAccessConfig dataAccessConfig = new TestDataAccessConfig(UserDdbItem.class, UserSessionDdbItem.class);
-        ApiHandlerConfiguration apiHandlerConfiguration = new ApiHandlerConfiguration(dataAccessConfig);
+        ApiHandlerConfiguration apiHandlerConfiguration = new ApiHandlerConfiguration(getModule());
 
         authenticateUserHandler = apiHandlerConfiguration.getAuthenticateUserHandler();
         createUserHandler = apiHandlerConfiguration.getCreateUserHandler();

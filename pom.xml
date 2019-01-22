@@ -64,10 +64,9 @@
                         <!-- Specific directories -->
                         <exclude>**/com/frjgames/dal/ddb/items/*.class</exclude>
                         <exclude>**/com/frjgames/dal/ddb/typeconverters/types/*.class</exclude>
-                        <exclude>**/com/frjgames/dal/models/keys/*.class</exclude>
 
                         <!-- Individual Classes -->
-                        <exclude>**/com/frjgames/dal/ddb/accessors/BaseDynamoDbAccessor.class</exclude>
+                        <exclude>**/com/frjgames/dal/ddb/accessors/DynamoDbAccessor.class</exclude>
                         <exclude>**/com/frjgames/app/password/PasswordModule.class</exclude>
                         <exclude>**/com/frjgames/app/sessions/SessionModule.class</exclude>
                         <exclude>**/com/frjgames/rest/Application.class</exclude>

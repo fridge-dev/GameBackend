@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  * Functional integ test for {@link PasswordHasher} class.
  *
- * @author alecva
+ * @author fridge
  */
 public class PasswordHasherIntegTest {
 

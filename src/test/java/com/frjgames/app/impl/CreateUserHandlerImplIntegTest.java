@@ -7,9 +7,9 @@ import com.frjgames.app.api.CreateUserHandler;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
 import com.frjgames.app.api.models.outputs.CreateUserOutput;
 import com.frjgames.app.sessions.models.SessionData;
-import com.frjgames.dal.config.TestDataAccessConfig;
 import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.items.UserSessionDdbItem;
+import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbLocalTestBase;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,16 +17,19 @@ import org.junit.Test;
 /**
  * Functional integ test for {@link CreateUserHandlerImpl} class.
  *
- * @author alecva
+ * @author fridge
  */
-public class CreateUserHandlerImplIntegTest {
+public class CreateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBase {
 
     private CreateUserHandler createUserHandler;
 
+    public CreateUserHandlerImplIntegTest() {
+        super(UserDdbItem.class, UserSessionDdbItem.class);
+    }
+
     @Before
     public void setup() {
-        TestDataAccessConfig dataAccessConfig = new TestDataAccessConfig(UserDdbItem.class, UserSessionDdbItem.class);
-        ApiHandlerConfiguration apiHandlerConfiguration = new ApiHandlerConfiguration(dataAccessConfig);
+        ApiHandlerConfiguration apiHandlerConfiguration = new ApiHandlerConfiguration(getModule());
 
         createUserHandler = apiHandlerConfiguration.getCreateUserHandler();
     }

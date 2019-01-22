@@ -5,7 +5,7 @@ package com.frjgames.testutils.argmatcher;
  *
  * This FunctionalInterface provides ability to create custom matching logic from anonymous lambdas.
  *
- * @author alecva
+ * @author fridge
  */
 @FunctionalInterface
 public interface TestUtilArgMatcherLambda<T> {

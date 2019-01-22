@@ -1,6 +1,6 @@
 package com.frjgames.app.sessions;
 
-import com.frjgames.dal.interfaces.UserSessionAccessor;
+import com.frjgames.dal.models.interfaces.UserSessionAccessor;
 import lombok.RequiredArgsConstructor;
 import lombok.Synchronized;
 

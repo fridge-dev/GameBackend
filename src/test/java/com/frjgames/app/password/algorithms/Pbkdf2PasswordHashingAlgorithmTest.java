@@ -17,7 +17,7 @@ import org.junit.Test;
  *
  * This is kind of a functional integ test, since there are no dependencies, and we can't force some of the exception branches.
  *
- * @author alecva
+ * @author fridge
  */
 public class Pbkdf2PasswordHashingAlgorithmTest {
 

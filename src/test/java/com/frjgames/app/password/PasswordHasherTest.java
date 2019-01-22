@@ -23,7 +23,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 /**
  * Tests the {@link PasswordHasher} class.
  *
- * @author alecva
+ * @author fridge
  */
 @RunWith(MockitoJUnitRunner.class)
 public class PasswordHasherTest {

@@ -11,8 +11,8 @@ import com.frjgames.app.sessions.SessionManager;
 import com.frjgames.app.sessions.models.CreateSessionInput;
 import com.frjgames.app.sessions.models.SessionData;
 import com.frjgames.app.utils.UniqueIdUtils;
-import com.frjgames.dal.interfaces.UserAccessor;
-import com.frjgames.dal.models.User;
+import com.frjgames.dal.models.interfaces.UserAccessor;
+import com.frjgames.dal.models.data.User;
 import com.frjgames.dal.models.keys.UserDataKey;
 import lombok.RequiredArgsConstructor;
 

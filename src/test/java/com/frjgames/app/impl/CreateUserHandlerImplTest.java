@@ -10,13 +10,13 @@ import com.frjgames.app.api.models.outputs.CreateUserOutput;
 import com.frjgames.app.password.PasswordHasher;
 import com.frjgames.app.password.models.InvalidHashException;
 import com.frjgames.app.sessions.SessionManager;
-import com.frjgames.dal.interfaces.UserAccessor;
+import com.frjgames.dal.models.interfaces.UserAccessor;
 import com.frjgames.dal.models.keys.UserDataKey;
 import com.frjgames.app.password.models.CannotPerformHashException;
 import com.frjgames.app.sessions.models.CreateSessionInput;
 import com.frjgames.app.sessions.models.SessionData;
 import com.frjgames.app.utils.UniqueIdUtils;
-import com.frjgames.dal.models.User;
+import com.frjgames.dal.models.data.User;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -30,7 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 /**
  * Tests the {@link CreateUserHandlerImpl} class.
  *
- * @author alecva
+ * @author fridge
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CreateUserHandlerImplTest {
