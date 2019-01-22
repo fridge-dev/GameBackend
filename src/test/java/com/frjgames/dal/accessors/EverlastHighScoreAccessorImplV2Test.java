@@ -40,7 +40,7 @@ public class EverlastHighScoreAccessorImplV2Test extends TestUtilDynamoDbLocalTe
 
     @Before
     public void setup() {
-        accessor = getModule().everlastHighScoreAccessor();
+        accessor = getDalModule().everlastHighScoreAccessor();
     }
 
     @Test

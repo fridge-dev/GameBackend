@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * Key for loading a user. Currently, only username is supported.
+ * Key for loading a user.
  *
  * @author fridge
  */

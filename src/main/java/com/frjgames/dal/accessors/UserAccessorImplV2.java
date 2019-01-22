@@ -49,7 +49,7 @@ public class UserAccessorImplV2 implements UserAccessor {
      * Load user by username (GSI).
      */
     @Override
-    public Optional<User> load(UserDataKey key) {
+    public Optional<User> load(final UserDataKey key) {
         return loadUserByUsername(key.getUsername())
                 .map(this::itemToDomainType);
     }

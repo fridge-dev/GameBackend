@@ -31,7 +31,7 @@ public class UserSessionAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase
 
     @Before
     public void setup() {
-        accessor = getModule().userSessionAccessor();
+        accessor = getDalModule().userSessionAccessor();
     }
 
     @Test

@@ -34,18 +34,18 @@ public class UserAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase<UserDd
 
     @Before
     public void setup() {
-        accessor = getModule().userAccessor();
+        accessor = getDalModule().userAccessor();
     }
 
     @Test
-    public void createUser() throws Exception {
+    public void create() throws Exception {
         User user = newUser();
 
         accessor.create(user);
     }
 
     @Test
-    public void createUser_SameId() throws Exception {
+    public void create_SameId() throws Exception {
         User user = newUser();
 
         accessor.create(user);
@@ -54,7 +54,7 @@ public class UserAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase<UserDd
     }
 
     @Test
-    public void createUser_SameUsername() throws Exception {
+    public void create_SameUsername() throws Exception {
         User user1 = newUser();
 
         User user2 = user1.toBuilder()
@@ -67,7 +67,7 @@ public class UserAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase<UserDd
     }
 
     @Test
-    public void loadUserByUsername() throws Exception {
+    public void load() throws Exception {
         User savedUser = newUser();
         UserDataKey userKey = UserDataKey.builder()
                 .username(savedUser.getUsername())
@@ -86,7 +86,7 @@ public class UserAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase<UserDd
     }
 
     @Test(expected = InvalidDataException.class)
-    public void loadUserByUsername_MultipleUsers() throws Exception {
+    public void load_MultipleUsersSameUsername() throws Exception {
         // Save two users with same name
         User user1 = newUser();
         User user2 = user1.toBuilder()

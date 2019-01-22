@@ -29,7 +29,7 @@ public class CreateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBas
 
     @Before
     public void setup() {
-        ApiHandlerModule apiHandlerModule = new ApiHandlerModule(getModule());
+        ApiHandlerModule apiHandlerModule = new ApiHandlerModule(getDalModule());
 
         createUserHandler = apiHandlerModule.getCreateUserHandler();
     }

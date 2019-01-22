@@ -32,11 +32,11 @@ public abstract class TestUtilDynamoDbLocalTestBase<T extends DdbItem> {
     }
 
     @Getter(AccessLevel.PROTECTED)
-    private DataAccessLayerModule module;
+    private DataAccessLayerModule dalModule;
 
     @Before
     public void superBefore() {
-        module = DataAccessLayerModuleFactory.getModuleLocal(itemsToCreate);
+        dalModule = DataAccessLayerModuleFactory.getModuleLocal(itemsToCreate);
     }
 
 }
