@@ -1,9 +1,9 @@
 package com.frjgames.dal.models.exceptions;
 
 /**
- * TODO
+ * Base exception class to throw when something bad happens in the DAL.
  *
- * @author TODO
+ * @author fridge
  */
 public class DataAccessLayerException extends RuntimeException {
 

@@ -3,9 +3,9 @@ package com.frjgames.rest;
 import org.glassfish.jersey.server.ResourceConfig;
 
 /**
- * TODO
+ * The entry point for the application startup using Jersey REST. I think?
  *
- * @author TODO
+ * @author fridge
  */
 public class Application extends ResourceConfig {
 

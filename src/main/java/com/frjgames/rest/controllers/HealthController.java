@@ -6,9 +6,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 /**
- * TODO
+ * Simple controller which responds to health pings, to ensure the process is running.
  *
- * @author TODO
+ * @author fridge
  */
 @Path("/health")
 public class HealthController {

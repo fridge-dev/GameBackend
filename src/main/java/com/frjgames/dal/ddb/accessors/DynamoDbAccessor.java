@@ -11,9 +11,9 @@ import com.frjgames.dal.ddb.items.DdbItem;
 import java.util.Optional;
 
 /**
- * TODO
+ * This class is responsible for adapting the {@link IDynamoDBMapper} from AWS SDK to the application.
  *
- * @author TODO
+ * @author fridge
  */
 public class DynamoDbAccessor<T extends DdbItem> {
 

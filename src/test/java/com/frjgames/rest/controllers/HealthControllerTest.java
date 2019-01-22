@@ -6,9 +6,9 @@ import javax.ws.rs.core.Response;
 import org.junit.Test;
 
 /**
- * TODO
+ * Tests the {@link HealthController} class.
  *
- * @author TODO
+ * @author fridge
  */
 public class HealthControllerTest {
 

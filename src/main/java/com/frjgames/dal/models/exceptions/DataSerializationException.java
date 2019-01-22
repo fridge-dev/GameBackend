@@ -1,9 +1,9 @@
 package com.frjgames.dal.models.exceptions;
 
 /**
- * TODO
+ * Exception thrown when there is an issue serializing data in the DAL.
  *
- * @author TODO
+ * @author fridge
  */
 public class DataSerializationException extends DataAccessLayerException {
     public DataSerializationException(String message) {

@@ -19,7 +19,7 @@ import java.util.function.Function;
 import lombok.experimental.UtilityClass;
 
 /**
- * TODO
+ * This is responsible for encoding/decoding pagination objects returned by DynamoDB SDK.
  *
  * @author fridge
  */
@@ -35,7 +35,7 @@ public class DdbPaginationMapper {
     );
 
     /**
-     * TODO
+     * Converts a DynamoDB {@link QueryResultPage} into a List of domain objects with an encoded pagination token.
      */
     public static <T, U> PaginatedResult<U> makePaginatedResult(final QueryResultPage<T> resultPage, final Function<T, U> transformer) {
         List<U> results = resultPage.getResults()
@@ -45,25 +45,10 @@ public class DdbPaginationMapper {
 
         Map<String, AttributeValue> lastEvaluatedKey = resultPage.getLastEvaluatedKey();
 
-        return new PaginatedResult<>(results, serialize(lastEvaluatedKey));
+        return new PaginatedResult<>(results, encodePaginationToken(lastEvaluatedKey));
     }
 
-    /**
-     * TODO
-     */
-    public static Optional<Map<String, AttributeValue>> extractLastEvaluatedKey(final String paginationToken) {
-        if (paginationToken == null) {
-            return Optional.empty();
-        }
-
-        try {
-            return Optional.of(OBJECT_MAPPER.readValue(paginationToken, SERIALIZED_TYPE));
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid pagination token.", e);
-        }
-    }
-
-    private static String serialize(final Map<String, AttributeValue> lastEvaluatedKey) {
+    private static String encodePaginationToken(final Map<String, AttributeValue> lastEvaluatedKey) {
         if (lastEvaluatedKey == null) {
             return null;
         }
@@ -72,6 +57,25 @@ public class DdbPaginationMapper {
             return OBJECT_MAPPER.writeValueAsString(lastEvaluatedKey);
         } catch (JsonProcessingException e) {
             throw new DataSerializationException("Failed to create pagination token.", e);
+        }
+    }
+
+    /**
+     * Converts a pagination token returned from {@link #makePaginatedResult(QueryResultPage, Function)} into a DynamoDB pagination key.
+     */
+    public static Optional<Map<String, AttributeValue>> extractLastEvaluatedKey(final String paginationToken) {
+        if (paginationToken == null) {
+            return Optional.empty();
+        }
+
+        return decodePaginationToken(paginationToken);
+    }
+
+    private static Optional<Map<String, AttributeValue>> decodePaginationToken(final String paginationToken) {
+        try {
+            return Optional.of(OBJECT_MAPPER.readValue(paginationToken, SERIALIZED_TYPE));
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Invalid pagination token.", e);
         }
     }
 }
