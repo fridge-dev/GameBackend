@@ -23,10 +23,4 @@ public class CreateUserInput {
      */
     private final String password;
 
-    /**
-     * A unique string provided by the caller that will be used to de-dupe retried requests.
-     *
-     * A good candidate for this field is the client-side request ID.
-     */
-    private final String idempotencyKey;
 }

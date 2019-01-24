@@ -1,6 +1,7 @@
 package com.frjgames.dal.models.interfaces;
 
 import com.frjgames.dal.models.data.AppDataModel;
+import com.frjgames.dal.models.exceptions.DataAccessLayerException;
 import com.frjgames.dal.models.keys.AppDataKey;
 import java.util.Optional;
 
@@ -14,8 +15,14 @@ import java.util.Optional;
  */
 public interface DataAccessor<K extends AppDataKey, V extends AppDataModel> {
 
-    void create(V data);
+    /**
+     * Create a new entry in the database.
+     */
+    void create(V data) throws DataAccessLayerException;
 
-    Optional<V> load(K key);
+    /**
+     * Loads the unique entry from the database.
+     */
+    Optional<V> load(K key) throws DataAccessLayerException;
 
 }

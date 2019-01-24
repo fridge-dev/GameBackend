@@ -72,7 +72,7 @@ public class AuthenticateUserHandlerImpl implements AuthenticateUserHandler {
 
     private SessionData createNewSessionToken(final User user) {
         CreateSessionInput sessionInput = CreateSessionInput.builder()
-                .userId(user.getUserId())
+                .userId(user.getUsername())
                 .build();
 
         return sessionManager.createSession(sessionInput);

@@ -1,25 +1,28 @@
 package com.frjgames.app.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
+import com.frjgames.app.api.models.exceptions.DuplicateUsernameException;
 import com.frjgames.app.api.models.exceptions.InternalAppException;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
 import com.frjgames.app.api.models.outputs.CreateUserOutput;
 import com.frjgames.app.password.PasswordHasherImpl;
+import com.frjgames.app.password.models.CannotPerformHashException;
 import com.frjgames.app.password.models.InvalidHashException;
 import com.frjgames.app.sessions.SessionManager;
-import com.frjgames.dal.models.interfaces.UserAccessor;
-import com.frjgames.dal.models.keys.UserDataKey;
-import com.frjgames.app.password.models.CannotPerformHashException;
 import com.frjgames.app.sessions.models.CreateSessionInput;
 import com.frjgames.app.sessions.models.SessionData;
-import com.frjgames.app.utils.UniqueIdUtils;
 import com.frjgames.dal.models.data.User;
+import com.frjgames.dal.models.exceptions.ConditionalWriteException;
+import com.frjgames.dal.models.interfaces.UserAccessor;
+import com.frjgames.dal.models.keys.UserDataKey;
 import java.util.Optional;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -38,13 +41,9 @@ public class CreateUserHandlerImplTest {
     private static final String USERNAME = "fridge_guy_XX";
     private static final String PASSWORD = "pass123";
     private static final String HASHED_PASSWORD = "3zw4ex5rc6tv7yb8un";
-    private static final String USER_ID = "mklnjoih98y&VUGTF&5efgtxSE%#Q";
 
     @InjectMocks
     private CreateUserHandlerImpl target;
-
-    @Mock
-    private UniqueIdUtils injectedUniqueIdUtils;
 
     @Mock
     private UserAccessor injectedUserAccessor;
@@ -69,7 +68,6 @@ public class CreateUserHandlerImplTest {
                 .password(PASSWORD)
                 .build();
 
-        stubUniqueIdUtils();
         stubPasswordHasher();
         stubUserAccessorCreate();
         stubUserAccessorLoad();
@@ -79,10 +77,6 @@ public class CreateUserHandlerImplTest {
     private void stubUserAccessorCreate() {
         createdUser = ArgumentCaptor.forClass(User.class);
         doNothing().when(injectedUserAccessor).create(createdUser.capture());
-    }
-
-    private void stubUniqueIdUtils() {
-        when(injectedUniqueIdUtils.newUserId()).thenReturn(USER_ID);
     }
 
     private void stubPasswordHasher() throws Exception {
@@ -95,7 +89,6 @@ public class CreateUserHandlerImplTest {
                 .build();
 
         User stubbedUser = User.builder()
-                .userId(USER_ID)
                 .username(USERNAME)
                 .build();
 
@@ -114,19 +107,17 @@ public class CreateUserHandlerImplTest {
 
         // Validate
         CreateUserOutput expectedOutput = CreateUserOutput.builder()
-                .userId(USER_ID)
                 .sessionToken(mockSession)
                 .build();
         assertEquals(expectedOutput, output);
 
         User expectedUser = User.builder()
-                .userId(USER_ID)
                 .username(USERNAME)
                 .password(HASHED_PASSWORD)
                 .build();
         assertEquals(expectedUser, createdUser.getValue());
 
-        assertEquals(USER_ID, sessionInputCaptor.getValue().getUserId());
+        assertEquals(USERNAME, sessionInputCaptor.getValue().getUserId());
     }
 
     @Test(expected = InternalAppException.class)
@@ -145,14 +136,21 @@ public class CreateUserHandlerImplTest {
         target.handle(input);
     }
 
-    @Test
-    @Ignore("TODO - implement src, then this test")
+    @Test(expected = DuplicateUsernameException.class)
     public void handleCreateUser_UsernameAlreadyExists() throws Exception {
+        doThrow(new ConditionalWriteException("fake")).when(injectedUserAccessor).create(any());
+
+        // Method under test
+        target.handle(input);
     }
 
     @Test
-    @Ignore("TODO - implement this, maybe as integ test")
-    public void handleCreateUser_Idempotent() throws Exception {
+    public void handleCreateUser_CreateSessionFailure() throws Exception {
+        when(injectedSessionManager.createSession(any())).thenThrow(new RuntimeException("fake"));
+
+        CreateUserOutput output = target.handle(input);
+
+        assertFalse(output.getSessionToken().isPresent());
     }
 
 }

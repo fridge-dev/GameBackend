@@ -3,12 +3,11 @@ package com.frjgames.dal.accessors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbLocalTestBase;
-import com.frjgames.dal.models.exceptions.InvalidDataException;
-import com.frjgames.dal.models.interfaces.UserAccessor;
 import com.frjgames.dal.models.data.User;
+import com.frjgames.dal.models.exceptions.ConditionalWriteException;
+import com.frjgames.dal.models.interfaces.UserAccessor;
 import com.frjgames.dal.models.keys.UserDataKey;
 import com.frjgames.testutils.TestUtilExceptionValidator;
 import java.util.Optional;
@@ -22,7 +21,6 @@ import org.junit.Test;
  */
 public class UserAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase<UserDdbItem> {
 
-    private static final String USER_ID = "souhgaougaasgunjs9hf184";
     private static final String USERNAME = "fridge";
     private static final String PASSWORD = "H^g97R%vk,";
 
@@ -45,25 +43,12 @@ public class UserAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase<UserDd
     }
 
     @Test
-    public void create_SameId() throws Exception {
+    public void create_SameUsername() throws Exception {
         User user = newUser();
 
         accessor.create(user);
 
-        TestUtilExceptionValidator.validateThrown(ConditionalCheckFailedException.class, () -> accessor.create(user));
-    }
-
-    @Test
-    public void create_SameUsername() throws Exception {
-        User user1 = newUser();
-
-        User user2 = user1.toBuilder()
-                .userId("otherId")
-                .build();
-
-        // It is allowed
-        accessor.create(user1);
-        accessor.create(user2);
+        TestUtilExceptionValidator.validateThrown(ConditionalWriteException.class, () -> accessor.create(user));
     }
 
     @Test
@@ -85,24 +70,8 @@ public class UserAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase<UserDd
         assertEquals(savedUser, loadedUser.orElse(null));
     }
 
-    @Test(expected = InvalidDataException.class)
-    public void load_MultipleUsersSameUsername() throws Exception {
-        // Save two users with same name
-        User user1 = newUser();
-        User user2 = user1.toBuilder()
-                .userId("otherId")
-                .build();
-
-        accessor.create(user1);
-        accessor.create(user2);
-
-        // Load by user name
-        accessor.load(UserDataKey.builder().username(user1.getUsername()).build());
-    }
-
     private User newUser() {
         return User.builder()
-                .userId(USER_ID)
                 .username(USERNAME)
                 .password(PASSWORD)
                 .build();

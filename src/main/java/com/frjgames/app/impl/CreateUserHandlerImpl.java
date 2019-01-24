@@ -1,6 +1,7 @@
 package com.frjgames.app.impl;
 
 import com.frjgames.app.api.CreateUserHandler;
+import com.frjgames.app.api.models.exceptions.DuplicateUsernameException;
 import com.frjgames.app.api.models.exceptions.InternalAppException;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
 import com.frjgames.app.api.models.outputs.CreateUserOutput;
@@ -10,10 +11,9 @@ import com.frjgames.app.password.models.InvalidHashException;
 import com.frjgames.app.sessions.SessionManager;
 import com.frjgames.app.sessions.models.CreateSessionInput;
 import com.frjgames.app.sessions.models.SessionData;
-import com.frjgames.app.utils.UniqueIdUtils;
 import com.frjgames.dal.models.data.User;
+import com.frjgames.dal.models.exceptions.ConditionalWriteException;
 import com.frjgames.dal.models.interfaces.UserAccessor;
-import com.frjgames.dal.models.keys.UserDataKey;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -24,8 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateUserHandlerImpl implements CreateUserHandler {
 
-    private final UniqueIdUtils uniqueIdUtils;
-
     private final UserAccessor userAccessor;
 
     private final SessionManager sessionManager;
@@ -35,23 +33,28 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
     /**
      * Handle request by creating user, then creating a session for that user.
      */
-    public CreateUserOutput handle(final CreateUserInput input) throws InternalAppException {
+    public CreateUserOutput handle(final CreateUserInput input) throws InternalAppException, DuplicateUsernameException {
         String username = input.getUsername();
         String password = input.getPassword();
 
-        createUser(username, password);
-        User user = loadOurOwnWrite(username);
-        SessionData token = createSessionToken(user);
+        User user = createUser(username, password);
+
+        // After user is created, we must not let any other part of the API fail, because client's retry
+        // will result in a DuplicateUsernameException.
+        SessionData token;
+        try {
+            token = createSessionToken(user);
+        } catch (RuntimeException e) {
+            // TODO log
+            token = null;
+        }
 
         return CreateUserOutput.builder()
-                .userId(user.getUserId())
                 .sessionToken(token)
                 .build();
     }
 
-    private void createUser(final String username, final String password) throws InternalAppException {
-        String userId = uniqueIdUtils.newUserId();
-
+    private User createUser(final String username, final String password) throws InternalAppException, DuplicateUsernameException {
         String hashedPassword;
         try {
             hashedPassword = passwordHasher.createStorableHash(password);
@@ -60,30 +63,23 @@ public class CreateUserHandlerImpl implements CreateUserHandler {
         }
 
         User user = User.builder()
-                .userId(userId)
                 .username(username)
                 .password(hashedPassword)
                 .build();
 
-        // Does not handle case when username already exists :0
-        userAccessor.create(user);
-    }
+        try {
+            userAccessor.create(user);
+        } catch (ConditionalWriteException e) {
+            throw new DuplicateUsernameException("Username is already taken.", e);
+        }
 
-    /**
-     * Read-our-own-write to ensure the DB is in consistent state (GSI updated).
-     */
-    private User loadOurOwnWrite(final String username) {
-        UserDataKey key = UserDataKey.builder()
-                .username(username)
-                .build();
-
-        // Should add retries instead.
-        return userAccessor.load(key).orElseThrow(() -> new IllegalStateException("nope"));
+        return user;
     }
 
     private SessionData createSessionToken(final User user) {
+        // Username <-> UserID
         CreateSessionInput sessionInput = CreateSessionInput.builder()
-                .userId(user.getUserId())
+                .userId(user.getUsername())
                 .build();
 
         return sessionManager.createSession(sessionInput);

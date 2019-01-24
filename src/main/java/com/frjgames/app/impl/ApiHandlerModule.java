@@ -5,7 +5,6 @@ import com.frjgames.app.api.AuthenticateUserHandler;
 import com.frjgames.app.api.CreateUserHandler;
 import com.frjgames.app.password.PasswordModule;
 import com.frjgames.app.sessions.SessionModule;
-import com.frjgames.app.utils.UniqueIdUtils;
 import com.frjgames.dal.config.DataAccessLayerModule;
 import lombok.Synchronized;
 
@@ -20,7 +19,6 @@ public class ApiHandlerModule {
      * Dependencies
      */
     private final DataAccessLayerModule dataAccessLayerModule;
-    private final UniqueIdUtils uniqueIdUtils = UniqueIdUtils.getInstance();
     private final SessionModule sessionModule;
     private final PasswordModule passwordModule = new PasswordModule();
 
@@ -42,7 +40,6 @@ public class ApiHandlerModule {
     public CreateUserHandler getCreateUserHandler() {
         if (createUserHandlerSingleton == null) {
             createUserHandlerSingleton = new CreateUserHandlerImpl(
-                    uniqueIdUtils,
                     dataAccessLayerModule.userAccessor(),
                     sessionModule.sessionManager(),
                     passwordModule.passwordHasher()

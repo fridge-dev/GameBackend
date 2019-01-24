@@ -34,7 +34,6 @@ public class AuthenticateUserHandlerImplTest {
 
     private static final String USERNAME = "apsughapse";
     private static final String CLIENT_PASSWORD = "1948f19j19348j";
-    private static final String USER_ID = "extcfyvgubhinj";
     private static final String PERSISTED_PASSWORD = "8ag7sfo8a7sdfh";
 
     @InjectMocks
@@ -57,7 +56,6 @@ public class AuthenticateUserHandlerImplTest {
     @Before
     public void setup() {
         mockUser = User.builder()
-                .userId(USER_ID)
                 .username(USERNAME)
                 .password(PERSISTED_PASSWORD)
                 .build();
@@ -67,7 +65,7 @@ public class AuthenticateUserHandlerImplTest {
     public void handleAuthenticateUser() throws Exception {
         when(injectedUserAccessor.load(argThat(matchesUsername(USERNAME)))).thenReturn(Optional.of(mockUser));
         when(injectedPasswordHasher.matches(CLIENT_PASSWORD, PERSISTED_PASSWORD)).thenReturn(true);
-        when(injectedSessionManager.createSession(argThat(matchesUserId(USER_ID)))).thenReturn(mockSession);
+        when(injectedSessionManager.createSession(argThat(matchesUserId(USERNAME)))).thenReturn(mockSession);
 
         AuthenticateUserOutput output = subject.handle(newInput());
 

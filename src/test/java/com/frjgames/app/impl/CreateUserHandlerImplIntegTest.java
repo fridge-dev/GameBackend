@@ -1,17 +1,19 @@
 package com.frjgames.app.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.frjgames.app.api.CreateUserHandler;
+import com.frjgames.app.api.models.exceptions.DuplicateUsernameException;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
 import com.frjgames.app.api.models.outputs.CreateUserOutput;
 import com.frjgames.app.sessions.models.SessionData;
 import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.items.UserSessionDdbItem;
 import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbLocalTestBase;
+import com.frjgames.testutils.TestUtilExceptionValidator;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -43,13 +45,13 @@ public class CreateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBas
 
         CreateUserOutput output = createUserHandler.handle(input);
 
-        SessionData sessionToken = output.getSessionToken();
-        assertEquals(output.getUserId(), sessionToken.getUserId());
+        SessionData sessionToken = output.getSessionToken().orElseThrow(() -> new AssertionError("Optional should be present."));
+        assertEquals(input.getUsername(), sessionToken.getUserId());
         assertTrue(sessionToken.getExpirationTimestampMs() > System.currentTimeMillis());
+        assertFalse(sessionToken.getPublicSessionToken().isEmpty());
     }
 
     @Test
-    @Ignore("TODO This is the next challenge")
     public void createUser_DuplicateUser() throws Exception {
         CreateUserInput input = CreateUserInput.builder()
                 .username("frj")
@@ -58,7 +60,6 @@ public class CreateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBas
 
         createUserHandler.handle(input);
 
-        // This should throw appropriate exception.
-        createUserHandler.handle(input);
+        TestUtilExceptionValidator.validateThrown(DuplicateUsernameException.class, () -> createUserHandler.handle(input));
     }
 }

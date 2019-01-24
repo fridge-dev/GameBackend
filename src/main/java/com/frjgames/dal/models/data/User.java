@@ -11,7 +11,6 @@ import lombok.Data;
 @Data
 @Builder(toBuilder = true)
 public class User implements AppDataModel {
-    private final String userId;
     private final String username;
     private final String password;
 }
