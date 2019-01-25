@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConvertedEnum;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBVersionAttribute;
 import com.frjgames.dal.ddb.typeconverters.types.GameResultType;
 import com.frjgames.dal.ddb.typeconverters.types.GameStatusType;
 import lombok.Data;
@@ -31,10 +32,11 @@ public class GameDdbItem implements DdbItem {
     private static final String COL_CREATION_TIME_MS = "CreationTimeMillis";
     private static final String COL_FIRST_USER_ID = "FirstUserID";
     private static final String COL_SECOND_USER_ID = "SecondUserID";
-    private static final String COL_STATUS = "Status";
+    public static final String COL_STATUS = "Status";
     private static final String COL_GAME_NAME = "GameName";
     private static final String COL_RESULT = "Result";
     private static final String COL_WINNER_USER_ID = "WinnerUserID";
+    private static final String COL_OPTIMISTIC_LOCKING_VERSION = "OptimisticLockVersion";
 
     /**
      * Unique ID of the game.
@@ -91,4 +93,10 @@ public class GameDdbItem implements DdbItem {
      */
     @DynamoDBAttribute(attributeName = COL_WINNER_USER_ID)
     private String winnerUserId;
+
+    /**
+     * Used for optimistic locking.
+     */
+    @DynamoDBVersionAttribute(attributeName = COL_OPTIMISTIC_LOCKING_VERSION)
+    private Long optimisticLockingVersion;
 }

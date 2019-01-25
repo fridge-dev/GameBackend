@@ -5,7 +5,8 @@ import java.util.Optional;
 import lombok.Data;
 
 /**
- * A simple POJO implementation.
+ * A POJO for encapsulating a list of results of a single "page" and a pagination token to be
+ * used to retrieve the next "page" of results.
  *
  * @author fridge
  */

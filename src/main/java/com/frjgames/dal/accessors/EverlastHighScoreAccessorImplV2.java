@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -119,13 +120,15 @@ public class EverlastHighScoreAccessorImplV2 implements EverlastHighScoreAccesso
      * Paginated version of {@link #loadForLevel(String, String)}. Use the pagination token from {@link PaginatedResult#paginationToken}
      */
     @Override
-    public PaginatedResult<EverlastHighScore> loadForLevel(final String worldId, final String levelId, final String paginationToken) {
+    public PaginatedResult<EverlastHighScore> loadForLevel(final String worldId, final String levelId, @Nullable final String paginationToken) {
         WorldLevelDdbType worldAndLevelId = WorldLevelDdbType.builder()
                 .worldId(worldId)
                 .levelId(levelId)
                 .build();
 
-        Map<String, AttributeValue> exclusiveStartKey = DdbPaginationMapper.extractLastEvaluatedKey(paginationToken).orElse(null);
+        Map<String, AttributeValue> exclusiveStartKey = paginationToken == null
+                ? null
+                : DdbPaginationMapper.extractLastEvaluatedKey(paginationToken);
         QueryResultPage<EverlastHighScoreDdbItem> resultPage = loadHighScoresForLevel(worldAndLevelId, exclusiveStartKey);
 
         return DdbPaginationMapper.makePaginatedResult(resultPage, this::itemToDomainType);

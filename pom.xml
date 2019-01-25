@@ -10,7 +10,7 @@
 
     <properties>
         <jacoco.threshold.class>1.00</jacoco.threshold.class>
-        <jacoco.threshold.method>0.95</jacoco.threshold.method>
+        <jacoco.threshold.method>0.90</jacoco.threshold.method>
         <jacoco.threshold.instruction>0.80</jacoco.threshold.instruction>
         <jacoco.threshold.line>0.80</jacoco.threshold.line>
         <jacoco.threshold.branch>0.80</jacoco.threshold.branch>
@@ -67,6 +67,7 @@
 
                         <!-- Individual Classes -->
                         <exclude>**/com/frjgames/dal/ddb/accessors/DynamoDbAccessor.class</exclude>
+                        <exclude>**/com/frjgames/dal/accessors/MatchMadeGameAccessorImpl$GamePaginationToken.class</exclude>
                         <exclude>**/com/frjgames/app/password/PasswordModule.class</exclude>
                         <exclude>**/com/frjgames/app/sessions/SessionModule.class</exclude>
                         <exclude>**/com/frjgames/rest/Application.class</exclude>
@@ -230,6 +231,14 @@
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
             <version>3.0.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.tngtech.java/junit-dataprovider -->
+        <dependency>
+            <groupId>com.tngtech.java</groupId>
+            <artifactId>junit-dataprovider</artifactId>
+            <version>1.13.1</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

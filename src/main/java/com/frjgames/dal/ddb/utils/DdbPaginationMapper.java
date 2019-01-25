@@ -9,14 +9,15 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.fasterxml.jackson.databind.type.SimpleType;
-import com.frjgames.dal.models.exceptions.DataSerializationException;
 import com.frjgames.dal.models.data.PaginatedResult;
+import com.frjgames.dal.models.exceptions.DataSerializationException;
+import com.google.common.base.Preconditions;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This is responsible for encoding/decoding pagination objects returned by DynamoDB SDK.
@@ -43,9 +44,11 @@ public class DdbPaginationMapper {
                 .map(transformer)
                 .collect(toList());
 
-        Map<String, AttributeValue> lastEvaluatedKey = resultPage.getLastEvaluatedKey();
+        String paginationToken = results.isEmpty()
+                ? null
+                : encodePaginationToken(resultPage.getLastEvaluatedKey());
 
-        return new PaginatedResult<>(results, encodePaginationToken(lastEvaluatedKey));
+        return new PaginatedResult<>(results, paginationToken);
     }
 
     private static String encodePaginationToken(final Map<String, AttributeValue> lastEvaluatedKey) {
@@ -63,17 +66,15 @@ public class DdbPaginationMapper {
     /**
      * Converts a pagination token returned from {@link #makePaginatedResult(QueryResultPage, Function)} into a DynamoDB pagination key.
      */
-    public static Optional<Map<String, AttributeValue>> extractLastEvaluatedKey(final String paginationToken) {
-        if (paginationToken == null) {
-            return Optional.empty();
-        }
+    public static Map<String, AttributeValue> extractLastEvaluatedKey(final String paginationToken) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(paginationToken));
 
         return decodePaginationToken(paginationToken);
     }
 
-    private static Optional<Map<String, AttributeValue>> decodePaginationToken(final String paginationToken) {
+    private static Map<String, AttributeValue> decodePaginationToken(final String paginationToken) {
         try {
-            return Optional.of(OBJECT_MAPPER.readValue(paginationToken, SERIALIZED_TYPE));
+            return OBJECT_MAPPER.readValue(paginationToken, SERIALIZED_TYPE);
         } catch (IOException e) {
             throw new IllegalArgumentException("Invalid pagination token.", e);
         }

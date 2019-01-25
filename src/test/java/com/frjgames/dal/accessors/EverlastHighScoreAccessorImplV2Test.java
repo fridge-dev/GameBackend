@@ -72,11 +72,10 @@ public class EverlastHighScoreAccessorImplV2Test extends TestUtilDynamoDbLocalTe
         assertNotEquals(loadedData, loadedData2);
     }
 
-
     @Test
     public void loadAllHighScoresForUser() throws Exception {
         // Save bulk data
-        iterateBulkData(1, 20, 30, (userNumber, worldNumber, levelNumber) -> {
+        iterateBulkData(1, 15, 25, (userNumber, worldNumber, levelNumber) -> {
             EverlastHighScore data = newDataForBulkIterator(userNumber, worldNumber, levelNumber);
             accessor.create(data);
         });
@@ -84,7 +83,7 @@ public class EverlastHighScoreAccessorImplV2Test extends TestUtilDynamoDbLocalTe
         // Load items
         Iterator<EverlastHighScore> dataIterator = accessor.loadAllForUser("user-0").iterator();
 
-        iterateBulkData(1, 20, 30, (userNumber, worldNumber, levelNumber) -> {
+        iterateBulkData(1, 15, 25, (userNumber, worldNumber, levelNumber) -> {
             // Iterator should always have a next item, so we don't check.
             EverlastHighScore data = dataIterator.next();
 

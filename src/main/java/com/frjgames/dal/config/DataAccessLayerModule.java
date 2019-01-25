@@ -1,6 +1,7 @@
 package com.frjgames.dal.config;
 
 import com.frjgames.dal.models.interfaces.EverlastHighScoreAccessor;
+import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.interfaces.UserAccessor;
 import com.frjgames.dal.models.interfaces.UserSessionAccessor;
 
@@ -18,4 +19,6 @@ public interface DataAccessLayerModule {
     UserSessionAccessor userSessionAccessor();
 
     EverlastHighScoreAccessor everlastHighScoreAccessor();
+
+    MatchMadeGameAccessor matchMadeGameAccessor();
 }
