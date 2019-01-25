@@ -1,9 +1,9 @@
 package com.frjgames.dal.models.interfaces;
 
 import com.frjgames.dal.models.data.MatchMadeGame;
-import com.frjgames.dal.models.data.PaginatedResult;
 import com.frjgames.dal.models.exceptions.DataAccessLayerException;
 import com.frjgames.dal.models.keys.GameIdKey;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,13 +19,8 @@ public interface MatchMadeGameAccessor extends DataAccessor<GameIdKey, MatchMade
     Optional<MatchMadeGame> loadByName(final String gameName) throws DataAccessLayerException;
 
     /**
-     * Load available games in descending order. This API supports pagination.
+     * Load available games in descending order.
      */
-    PaginatedResult<MatchMadeGame> loadAvailableGames(final long startTimestampMs) throws DataAccessLayerException;
-
-    /**
-     * Load available games in descending order. This API supports pagination.
-     */
-    PaginatedResult<MatchMadeGame> loadAvailableGames(final String paginationToken) throws DataAccessLayerException;
+    List<MatchMadeGame> loadAvailableGames(final long startTimestampMs) throws DataAccessLayerException;
 
 }

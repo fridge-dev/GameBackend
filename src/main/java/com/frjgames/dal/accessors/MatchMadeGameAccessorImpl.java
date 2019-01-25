@@ -3,31 +3,21 @@ package com.frjgames.dal.accessors;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.frjgames.dal.ddb.accessors.DynamoDbAccessor;
 import com.frjgames.dal.ddb.items.GameDdbItem;
 import com.frjgames.dal.ddb.typeconverters.types.GameStatusType;
 import com.frjgames.dal.ddb.utils.DdbExceptionTranslator;
 import com.frjgames.dal.ddb.utils.DdbExpressionFactory;
-import com.frjgames.dal.ddb.utils.DdbPaginationMapper;
 import com.frjgames.dal.models.data.MatchMadeGame;
-import com.frjgames.dal.models.data.PaginatedResult;
-import com.frjgames.dal.models.exceptions.DataSerializationException;
 import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.keys.GameIdKey;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.annotation.Nullable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class is responsible for accessing a {@link MatchMadeGame} from the DB.
@@ -38,16 +28,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 @RequiredArgsConstructor
 public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    private static class GamePaginationToken {
-        private long timestampHr;
-        private String internalPaginationToken;
-    }
-
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private final DynamoDbAccessor<GameDdbItem> ddbAccessor;
 
@@ -119,11 +99,11 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
      * @inheritDoc
      */
     @Override
-    public PaginatedResult<MatchMadeGame> loadAvailableGames(final long startTimestampMs) {
+    public List<MatchMadeGame> loadAvailableGames(final long startTimestampMs) {
         long initialHashKey = GameTimestampConverter.truncateHour(startTimestampMs);
 
-        PaginatedResult<MatchMadeGame> result = queryByTime(initialHashKey, null);
-        if (!result.getResults().isEmpty()) {
+        List<MatchMadeGame> result = queryByTime(initialHashKey, null);
+        if (!result.isEmpty()) {
             return result;
         }
 
@@ -132,7 +112,7 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
         return queryByTime(GameTimestampConverter.truncateHour(initialHashKey - 1L), null);
     }
 
-    private PaginatedResult<MatchMadeGame> queryByTime(final long timestampHr, @Nullable final Map<String, AttributeValue> lastEvaluatedKey) {
+    private List<MatchMadeGame> queryByTime(final long timestampHr, @Nullable final Map<String, AttributeValue> lastEvaluatedKey) {
         GameDdbItem key = new GameDdbItem();
         key.setCreationTimeHr(timestampHr);
 
@@ -146,42 +126,10 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
 
         QueryResultPage<GameDdbItem> resultPage = ddbAccessor.querySinglePage(query);
 
-        // Since we may use a different hash key than the one requested by caller, we need
-        // to encode this information in the pagination token for the next request.
-        PaginatedResult<MatchMadeGame> paginatedResult = DdbPaginationMapper.makePaginatedResult(resultPage, this::itemToDomainType);
-        String externalToken = paginatedResult.getPaginationToken()
-                .map(internalToken -> encodeHashKeyIntoPaginationToken(timestampHr, internalToken))
-                .orElse(null);
-
-        return new PaginatedResult<>(paginatedResult.getResults(), externalToken);
+        return resultPage.getResults()
+                .stream()
+                .map(this::itemToDomainType)
+                .collect(Collectors.toList());
     }
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public PaginatedResult<MatchMadeGame> loadAvailableGames(final String paginationToken) {
-        GamePaginationToken token = decodePaginationToken(paginationToken);
-        Map<String, AttributeValue> lastEvaluatedKey = DdbPaginationMapper.extractLastEvaluatedKey(token.getInternalPaginationToken());
-
-        return queryByTime(token.getTimestampHr(), lastEvaluatedKey);
-    }
-
-    private String encodeHashKeyIntoPaginationToken(final long timestampHr, final String paginationToken) {
-        try {
-            return OBJECT_MAPPER.writeValueAsString(new GamePaginationToken(timestampHr, paginationToken));
-        } catch (JsonProcessingException e) {
-            throw new DataSerializationException("Failed to encode pagination token.", e);
-        }
-    }
-
-    private GamePaginationToken decodePaginationToken(final String externalPaginationToken) {
-        Preconditions.checkArgument(StringUtils.isNotBlank(externalPaginationToken), "Null pagination token.");
-
-        try {
-            return OBJECT_MAPPER.readValue(externalPaginationToken, GamePaginationToken.class);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid pagination token provided. Cannot deserialize.", e);
-        }
-    }
 }

@@ -7,11 +7,11 @@ import static org.junit.Assert.assertTrue;
 import com.frjgames.dal.ddb.items.GameDdbItem;
 import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbLocalTestBase;
 import com.frjgames.dal.models.data.MatchMadeGame;
-import com.frjgames.dal.models.data.PaginatedResult;
 import com.frjgames.dal.models.exceptions.ConditionalWriteException;
 import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.keys.GameIdKey;
 import com.frjgames.testutils.TestUtilExceptionValidator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
@@ -90,13 +90,12 @@ public class MatchMadeGameAccessorImplTest extends TestUtilDynamoDbLocalTestBase
         }
 
         // Query for "baseTime", which will fall back to previous time window
-        PaginatedResult<MatchMadeGame> firstResult = gameAccessor.loadAvailableGames(baseTime);
-        assertEquals(numGames, firstResult.getResults().size());
-        assertFalse(firstResult.getPaginationToken().isPresent());
+        List<MatchMadeGame> firstResult = gameAccessor.loadAvailableGames(baseTime);
+        assertEquals(numGames, firstResult.size());
 
         // Query for the previous time window and ensure we get the same result
         long previousTime = baseTime - 1; // 11:59am
-        PaginatedResult<MatchMadeGame> secondResult = gameAccessor.loadAvailableGames(previousTime);
+        List<MatchMadeGame> secondResult = gameAccessor.loadAvailableGames(previousTime);
         assertEquals(firstResult, secondResult);
     }
 
