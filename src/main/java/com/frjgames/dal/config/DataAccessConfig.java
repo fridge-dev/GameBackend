@@ -11,6 +11,7 @@ import com.frjgames.dal.ddb.items.GameDdbItem;
 import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.items.UserSessionDdbItem;
 import com.frjgames.dal.models.interfaces.EverlastHighScoreAccessor;
+import com.frjgames.dal.models.interfaces.GameAccessor;
 import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.interfaces.UserAccessor;
 import com.frjgames.dal.models.interfaces.UserSessionAccessor;
@@ -51,4 +52,9 @@ import lombok.experimental.Accessors;
     private final MatchMadeGameAccessor matchMadeGameAccessor = new MatchMadeGameAccessorImpl(
             new DynamoDbAccessor<>(dynamoDBMapper, GameDdbItem.class)
     );
+
+    @Override
+    public GameAccessor gameAccessor() {
+        throw new UnsupportedOperationException("TODO start from here");
+    }
 }
