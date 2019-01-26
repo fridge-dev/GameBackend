@@ -23,6 +23,7 @@ public class GameBoardDdbItem implements DdbItem {
     private static final String COL_GAME_ID = "GameID";
     private static final String COL_GAME_BOARD_STATE = "GameBoardState";
     private static final String COL_NEXT_MOVE = "NextMoveUserID";
+    private static final String COL_NEXT_BOARD_INDEX = "NextBoardIndex";
     private static final String COL_OPTIMISTIC_LOCKING_VERSION = "OptimisticLockVersion";
 
     /**
@@ -47,6 +48,12 @@ public class GameBoardDdbItem implements DdbItem {
      */
     @DynamoDBAttribute(attributeName = COL_NEXT_MOVE)
     private int nextMove;
+
+    /**
+     * The array index [0, 9) of which board the next move should go in.
+     */
+    @DynamoDBAttribute(attributeName = COL_NEXT_BOARD_INDEX)
+    private int nextBoardIndex;
 
     /**
      * Used for optimistic locking.

@@ -13,6 +13,7 @@ import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.items.UserSessionDdbItem;
 import com.frjgames.dal.models.interfaces.EverlastHighScoreAccessor;
 import com.frjgames.dal.models.interfaces.GameAccessor;
+import com.frjgames.dal.models.interfaces.GameBoardAccessor;
 import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.interfaces.UserAccessor;
 import com.frjgames.dal.models.interfaces.UserSessionAccessor;
@@ -58,4 +59,12 @@ import lombok.experimental.Accessors;
     private final GameAccessor gameAccessor = new GameAccessorImpl(
             new DynamoDbAccessor<>(dynamoDBMapper, GameDdbItem.class)
     );
+
+    // TODO start here
+    @Getter(lazy = true)
+    private final GameBoardAccessor gameBoardAccessor = unsupported();
+
+    private static <T> T unsupported() {
+        throw new UnsupportedOperationException("Accessor is unsupported.");
+    }
 }
