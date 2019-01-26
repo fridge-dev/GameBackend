@@ -159,7 +159,7 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
         // Update the match
         gameItem.setSecondUserId(userId);
         gameItem.setStatus(GameStatusType.IN_PROGRESS);
-        ddbAccessor.saveItem(gameItem);
+        DdbExceptionTranslator.conditionalWrite(() -> ddbAccessor.saveItem(gameItem), "Race condition while setting match to in-progress.");
     }
 
     @Override
