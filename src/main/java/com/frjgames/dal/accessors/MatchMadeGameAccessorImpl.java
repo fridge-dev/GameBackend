@@ -9,8 +9,11 @@ import com.frjgames.dal.ddb.typeconverters.types.GameStatusType;
 import com.frjgames.dal.ddb.utils.DdbExceptionTranslator;
 import com.frjgames.dal.ddb.utils.DdbExpressionFactory;
 import com.frjgames.dal.models.data.MatchMadeGame;
+import com.frjgames.dal.models.exceptions.InvalidDataException;
+import com.frjgames.dal.models.exceptions.MissingDataException;
 import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.keys.GameIdKey;
+import com.frjgames.utils.FrjConditions;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +110,8 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
             return result;
         }
 
+        // Note: Below is business logic in a DAO. This is bad. I don't have time to make it right though.
+
         // If the initial query was empty, it could be because the hour just flipped.
         // This 2nd query allows us to query for matches created in the last 61-120 minutes.
         return queryByTime(GameTimestampConverter.truncateHour(initialHashKey - 1L), null);
@@ -130,6 +135,37 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
                 .stream()
                 .map(this::itemToDomainType)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Updates the game of the provided key with a second player.
+     *
+     * @param userId the second player (i.e. guest) of the game.
+     */
+    @Override
+    public void updateMatchWithGuestUser(final GameIdKey key, final String userId) {
+        // Load existing match
+        GameDdbItem gameItem = ddbAccessor.loadItem(key.getGameId())
+                .orElseThrow(() -> new MissingDataException(String.format("Cannot update game %s which isn't present in DB.", key.getGameId())));
+
+        // Validate the match
+        FrjConditions.checkArg(gameItem.getStatus() == GameStatusType.UNMATCHED,
+                () -> new InvalidDataException("Game state should be unmatched, but is " + gameItem.getStatus()));
+        FrjConditions.checkArg(gameItem.getSecondUserId() == null,
+                () -> new InvalidDataException("Game already has second user ID " + gameItem.getSecondUserId()));
+        FrjConditions.checkArg(!gameItem.getFirstUserId().equals(userId),
+                () -> new InvalidDataException("Game cannot be matched with first and second user as the same."));
+
+        // Update the match
+        gameItem.setSecondUserId(userId);
+        gameItem.setStatus(GameStatusType.IN_PROGRESS);
+        ddbAccessor.saveItem(gameItem);
+    }
+
+    @Override
+    public void delete(final GameIdKey key) {
+        // ...but when it is supported, maybe it should be a hard delete so we don't have to filter through items when scanning.
+        throw new UnsupportedOperationException("Delete game is not yet supported.");
     }
 
 }

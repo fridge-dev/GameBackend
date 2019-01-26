@@ -8,12 +8,15 @@ import com.frjgames.dal.ddb.items.GameDdbItem;
 import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbLocalTestBase;
 import com.frjgames.dal.models.data.MatchMadeGame;
 import com.frjgames.dal.models.exceptions.ConditionalWriteException;
+import com.frjgames.dal.models.exceptions.InvalidDataException;
+import com.frjgames.dal.models.exceptions.MissingDataException;
 import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.keys.GameIdKey;
 import com.frjgames.testutils.TestUtilExceptionValidator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,6 +30,7 @@ public class MatchMadeGameAccessorImplTest extends TestUtilDynamoDbLocalTestBase
     private static final String GAME_ID = "lsuhg";
     private static final String GAME_NAME = "why-not-zoidberg";
     private static final String HOST_USER_ID = "host-user";
+    private static final String GUEST_USER_ID = "guest-user";
     private static final long TIME_MS = System.currentTimeMillis();
 
     private MatchMadeGameAccessor gameAccessor;
@@ -44,7 +48,7 @@ public class MatchMadeGameAccessorImplTest extends TestUtilDynamoDbLocalTestBase
     public void create_Load() throws Exception {
         MatchMadeGame persistedGame = newData();
         GameIdKey key = GameIdKey.builder()
-                .gameId(newData().getGameId())
+                .gameId(persistedGame.getGameId())
                 .build();
 
         // 1. Load (empty)
@@ -97,6 +101,73 @@ public class MatchMadeGameAccessorImplTest extends TestUtilDynamoDbLocalTestBase
         long previousTime = baseTime - 1; // 11:59am
         List<MatchMadeGame> secondResult = gameAccessor.loadAvailableGames(previousTime);
         assertEquals(firstResult, secondResult);
+    }
+
+    @Test
+    public void updateMatchWithGuestUser() throws Exception {
+        MatchMadeGame persistedGame = newData();
+        GameIdKey key = GameIdKey.builder()
+                .gameId(persistedGame.getGameId())
+                .build();
+
+        // 1. Save game
+        gameAccessor.create(persistedGame);
+
+        // 2. Update game
+        gameAccessor.updateMatchWithGuestUser(key, GUEST_USER_ID);
+
+        // 3. Load and verify
+        MatchMadeGame loadedGame = gameAccessor.load(key).orElseGet(this::fail);
+        assertFalse(loadedGame.isGameUnmatched());
+    }
+
+    private <T> T fail() {
+        Assert.fail("Expected Optional to be present");
+        return null; // line above will throw exception, but this line is needed for compiler
+    }
+
+    @Test(expected = MissingDataException.class)
+    public void updateMatchWithGuestUser_GameDoesntExist() throws Exception {
+        GameIdKey key = GameIdKey.builder()
+                .gameId(GAME_ID)
+                .build();
+
+        gameAccessor.updateMatchWithGuestUser(key, GUEST_USER_ID);
+    }
+
+    @Test
+    public void updateMatchWithGuestUser_AlreadyPaired() throws Exception {
+        MatchMadeGame game = newData();
+        GameIdKey key = GameIdKey.builder()
+                .gameId(game.getGameId())
+                .build();
+
+        gameAccessor.create(game);
+
+        gameAccessor.updateMatchWithGuestUser(key, GUEST_USER_ID);
+
+        TestUtilExceptionValidator.validateThrown(InvalidDataException.class,
+                () -> gameAccessor.updateMatchWithGuestUser(key, "other" + GUEST_USER_ID)
+        );
+    }
+
+    @Test
+    public void updateMatchWithGuestUser_GuestIsHost() throws Exception {
+        MatchMadeGame game = newData();
+        GameIdKey key = GameIdKey.builder()
+                .gameId(game.getGameId())
+                .build();
+
+        gameAccessor.create(game);
+
+        TestUtilExceptionValidator.validateThrown(InvalidDataException.class,
+                () -> gameAccessor.updateMatchWithGuestUser(key, game.getHostUserId())
+        );
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void delete() throws Exception {
+        gameAccessor.delete(null);
     }
 
     private MatchMadeGame newData() {

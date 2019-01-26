@@ -16,11 +16,21 @@ public interface MatchMadeGameAccessor extends DataAccessor<GameIdKey, MatchMade
     /**
      * Load the game via the name index.
      */
-    Optional<MatchMadeGame> loadByName(final String gameName) throws DataAccessLayerException;
+    Optional<MatchMadeGame> loadByName(String gameName) throws DataAccessLayerException;
 
     /**
      * Load available games in descending order.
      */
-    List<MatchMadeGame> loadAvailableGames(final long startTimestampMs) throws DataAccessLayerException;
+    List<MatchMadeGame> loadAvailableGames(long startTimestampMs) throws DataAccessLayerException;
+
+    /**
+     * Update the game with the "matched" 2nd player.
+     */
+    void updateMatchWithGuestUser(GameIdKey key, String userId) throws DataAccessLayerException;
+
+    /**
+     * Delete the game from the match-making listing.
+     */
+    void delete(GameIdKey key) throws DataAccessLayerException;
 
 }
