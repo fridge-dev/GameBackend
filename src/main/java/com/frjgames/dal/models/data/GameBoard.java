@@ -1,5 +1,6 @@
 package com.frjgames.dal.models.data;
 
+import com.frjgames.dal.models.enums.CellOwnerEnum;
 import com.frjgames.dal.models.enums.PlayerEnum;
 import java.util.List;
 import lombok.Builder;
@@ -22,7 +23,7 @@ public class GameBoard implements AppDataModel {
     /**
      * The nested, ultimate game board. [0,9) indexes.
      */
-    private final List<List<PlayerEnum>> gameBoardState;
+    private final List<List<CellOwnerEnum>> gameBoardState;
 
     /**
      * Which player gets next move.

@@ -1,9 +1,9 @@
 package com.frjgames.dal.models.enums;
 
 /**
- * TODO
+ * The status and outcome of a game.
  *
- * @author TODO
+ * @author fridge
  */
 public enum GameStatusResultType {
 

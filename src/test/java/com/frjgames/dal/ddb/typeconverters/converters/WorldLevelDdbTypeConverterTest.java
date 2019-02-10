@@ -2,18 +2,15 @@ package com.frjgames.dal.ddb.typeconverters.converters;
 
 import static org.junit.Assert.assertEquals;
 
-import com.frjgames.dal.ddb.typeconverters.types.WorldLevelDdbType;
 import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbTypeConverterValidator;
+import com.frjgames.dal.ddb.typeconverters.types.WorldLevelDdbType;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 /**
  * Tests the {@link WorldLevelDdbTypeConverter} class.
  *
  * @author fridge
  */
-@RunWith(MockitoJUnitRunner.class)
 public class WorldLevelDdbTypeConverterTest {
 
     private static final String CONVERTED_WORLD_LEVEL = "1234-hello::2345-hello";
@@ -39,6 +36,7 @@ public class WorldLevelDdbTypeConverterTest {
 
         assertEquals(CONVERTED_WORLD_LEVEL, converted);
     }
+
     @Test
     public void unconvert() throws Exception {
         WorldLevelDdbType worldLevel = converter.unconvert(CONVERTED_WORLD_LEVEL);

@@ -17,4 +17,8 @@ public class FrjConditions {
         }
     }
 
+    public static <T extends Exception> void checkNotNull(final Object value, final Supplier<T> exceptionSupplier) throws T {
+        checkArg(null != value, exceptionSupplier);
+    }
+
 }

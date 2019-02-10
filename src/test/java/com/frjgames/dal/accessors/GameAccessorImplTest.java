@@ -14,6 +14,7 @@ import com.frjgames.dal.models.interfaces.GameAccessor;
 import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.keys.GameIdKey;
 import com.frjgames.testutils.TestUtilExceptionValidator;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,6 @@ import org.junit.Test;
  */
 public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbItem> {
 
-    private static final String GAME_ID = "lsuhg";
     private static final String GAME_NAME = "why-not-zoidberg";
     private static final String HOST_USER_ID = "host-user";
     private static final String GUEST_USER_ID = "guest-user";
@@ -33,6 +33,7 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
 
     private GameAccessor gameAccessor;
     private MatchMadeGameAccessor matchMadeGameAccessor;
+    private String gameId;
     private GameIdKey key;
 
     public GameAccessorImplTest() {
@@ -43,8 +44,9 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
     public void setup() {
         gameAccessor = super.getDalModule().gameAccessor();
         matchMadeGameAccessor = super.getDalModule().matchMadeGameAccessor();
+        gameId = RandomStringUtils.random(7);
         key = GameIdKey.builder()
-                .gameId(GAME_ID)
+                .gameId(gameId)
                 .build();
     }
 
@@ -57,7 +59,7 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
 
         // 3. Load and validate
         Game game = gameAccessor.load(key).orElseGet(this::fail);
-        assertEquals(GAME_ID, game.getGameId());
+        assertEquals(gameId, game.getGameId());
         assertEquals(HOST_USER_ID, game.getHostUserId());
         assertNull(game.getGuestUserId());
         assertEquals(GameStatusResultType.UNMATCHED, game.getStatus());
@@ -68,7 +70,7 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
 
         // 5. Load and validate
         game = gameAccessor.load(key).orElseGet(this::fail);
-        assertEquals(GAME_ID, game.getGameId());
+        assertEquals(gameId, game.getGameId());
         assertEquals(HOST_USER_ID, game.getHostUserId());
         assertEquals(GUEST_USER_ID, game.getGuestUserId());
         assertEquals(GameStatusResultType.IN_PROGRESS, game.getStatus());
@@ -77,7 +79,7 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
 
     private MatchMadeGame newMatchMadeGame() {
         return MatchMadeGame.builder()
-                .gameId(GAME_ID)
+                .gameId(gameId)
                 .gameName(GAME_NAME)
                 .hostUserId(HOST_USER_ID)
                 .creationTimeMs(TIME_MS)
@@ -93,7 +95,7 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
         gameAccessor.updateGameCompleted(key, statusType, winnerUserId);
 
         Game game = gameAccessor.load(key).orElseGet(this::fail);
-        assertEquals(GAME_ID, game.getGameId());
+        assertEquals(gameId, game.getGameId());
         assertEquals(HOST_USER_ID, game.getHostUserId());
         assertEquals(GUEST_USER_ID, game.getGuestUserId());
         assertEquals(statusType, game.getStatus());

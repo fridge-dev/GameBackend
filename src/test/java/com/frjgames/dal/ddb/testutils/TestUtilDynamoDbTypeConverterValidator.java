@@ -12,7 +12,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 public class TestUtilDynamoDbTypeConverterValidator {
 
     /**
-     * Tests the basic contract of a {@link DynamoDBTypeConverter} is held: convert() and unconvert() should be inverse operations.
+     * Tests the basic contract of a {@link DynamoDBTypeConverter} is held: convertPlayer() and unconvertPlayer() should be inverse operations.
      *
      * It may be possible for a use case to exist where this is not true, but for most DynamoDBTypeConverters, you can extend this UT
      * class and have this tested automatically.
@@ -33,7 +33,7 @@ public class TestUtilDynamoDbTypeConverterValidator {
     }
 
     /**
-     * Validates convert(unconvert(Y)) == Y
+     * Validates convertPlayer(unconvertPlayer(Y)) == Y
      */
     private static <S, T> void unconvertConvert(final DynamoDBTypeConverter<S, T> converter, final S marshalledValue) throws Exception {
         T unmarshalledValue = converter.unconvert(marshalledValue);
@@ -43,7 +43,7 @@ public class TestUtilDynamoDbTypeConverterValidator {
     }
 
     /**
-     * Validates unconvert(convert(X)) == X
+     * Validates unconvertPlayer(convertPlayer(X)) == X
      */
     private static <S, T> void convertUnconvert(final DynamoDBTypeConverter<S, T> converter, final T domainValue) throws Exception {
         S marshalledValue = converter.convert(domainValue);

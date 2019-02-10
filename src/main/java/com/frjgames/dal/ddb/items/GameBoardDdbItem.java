@@ -3,7 +3,11 @@ package com.frjgames.dal.ddb.items;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBVersionAttribute;
+import com.frjgames.dal.ddb.typeconverters.converters.GameBoardPlayerDdbTypeConverter;
+import com.frjgames.dal.ddb.typeconverters.converters.GameBoardStateDdbTypeConverter;
+import com.frjgames.dal.ddb.typeconverters.types.GameBoardPlayerDdbType;
 import java.util.List;
 import lombok.Data;
 
@@ -39,7 +43,8 @@ public class GameBoardDdbItem implements DdbItem {
      * 2 => player 2
      */
     @DynamoDBAttribute(attributeName = COL_GAME_BOARD_STATE)
-    private List<List<Integer>> gameBoardState;
+    @DynamoDBTypeConverted(converter = GameBoardStateDdbTypeConverter.class)
+    private List<List<GameBoardPlayerDdbType>> gameBoardState;
 
     /**
      * 0 => game over
@@ -47,7 +52,8 @@ public class GameBoardDdbItem implements DdbItem {
      * 2 => player 2
      */
     @DynamoDBAttribute(attributeName = COL_NEXT_MOVE)
-    private int nextMove;
+    @DynamoDBTypeConverted(converter = GameBoardPlayerDdbTypeConverter.class)
+    private GameBoardPlayerDdbType nextMove;
 
     /**
      * The array index [0, 9) of which board the next move should go in.

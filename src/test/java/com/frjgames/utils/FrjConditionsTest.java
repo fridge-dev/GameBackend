@@ -28,4 +28,17 @@ public class FrjConditionsTest {
         );
     }
 
+    @Test
+    public void checkNotNull() throws Exception {
+        FrjConditions.checkNotNull("", CHECKED_EXCEPTION);
+        FrjConditions.checkNotNull("", UNCHECKED_EXCEPTION);
+
+        TestUtilExceptionValidator.validateThrown(IOException.class,
+                () -> FrjConditions.checkNotNull(null, CHECKED_EXCEPTION)
+        );
+        TestUtilExceptionValidator.validateThrown(IllegalStateException.class,
+                () -> FrjConditions.checkNotNull(null, UNCHECKED_EXCEPTION)
+        );
+    }
+
 }
