@@ -1,6 +1,6 @@
 package com.frjgames.app.api.models.inputs;
 
-import com.frjgames.app.api.SaveEverlastHighScore;
+import com.frjgames.app.api.models.interfaces.SaveEverlastHighScore;
 import lombok.Builder;
 import lombok.Data;
 

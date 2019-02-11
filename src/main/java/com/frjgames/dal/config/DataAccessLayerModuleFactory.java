@@ -19,18 +19,18 @@ public class DataAccessLayerModuleFactory {
     /**
      * Module for LIVE database.
      *
-     * Wires together the {@link DynamoDbConfig} and {@link DataAccessConfig}.
+     * Wires together the {@link DynamoDbConfig} and {@link DataAccessLayerModuleImpl}.
      */
     public static DataAccessLayerModule getModule(final String awsRegion, final AWSCredentialsProvider awsCredentialsProvider) {
         DynamoDbConfig dynamoDbConfig = new DynamoDbConfig(awsRegion, awsCredentialsProvider);
 
-        return new DataAccessConfig(dynamoDbConfig.dynamoDBMapper());
+        return new DataAccessLayerModuleImpl(dynamoDbConfig.dynamoDBMapper());
     }
 
     /**
      * Module for LOCAL database.
      *
-     * Wires together the {@link DynamoDbConfig} and {@link DataAccessConfig}.
+     * Wires together the {@link DynamoDbConfig} and {@link DataAccessLayerModuleImpl}.
      */
     @SafeVarargs
     public static DataAccessLayerModule getModuleLocal(final Class<? extends DdbItem>... tablesToCreate) {
@@ -40,7 +40,7 @@ public class DataAccessLayerModuleFactory {
     /**
      * Module for LOCAL database.
      *
-     * Wires together the {@link DynamoDbConfig} and {@link DataAccessConfig}.
+     * Wires together the {@link DynamoDbConfig} and {@link DataAccessLayerModuleImpl}.
      */
     public static DataAccessLayerModule getModuleLocal(final Collection<Class<? extends DdbItem>> tablesToCreate) {
         AmazonDynamoDB localDb = DynamoDBEmbedded.create().amazonDynamoDB();
@@ -52,7 +52,7 @@ public class DataAccessLayerModuleFactory {
             ddbTableManager.createTable(table, 5L, 5L);
         }
 
-        return new DataAccessConfig(frjDynamoDbMapper);
+        return new DataAccessLayerModuleImpl(frjDynamoDbMapper);
     }
 
 }

@@ -14,6 +14,7 @@ import com.frjgames.dal.models.exceptions.MissingDataException;
 import com.frjgames.dal.models.interfaces.MatchMadeGameAccessor;
 import com.frjgames.dal.models.keys.GameIdKey;
 import com.frjgames.utils.FrjConditions;
+import com.frjgames.utils.TimeUtils;
 import com.google.common.collect.Iterables;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
         item.setGameName(data.getGameName());
         item.setFirstUserId(data.getHostUserId());
         item.setCreationTimeMs(data.getCreationTimeMs());
-        item.setCreationTimeHr(GameTimestampConverter.truncateHour(data.getCreationTimeMs()));
+        item.setCreationTimeHr(TimeUtils.truncateHour(data.getCreationTimeMs()));
         item.setStatus(GameStatusType.UNMATCHED);
 
         DdbExceptionTranslator.conditionalWrite(() -> ddbAccessor.saveItem(item), "Cannot create game because it already exists.");
@@ -103,7 +104,7 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
      */
     @Override
     public List<MatchMadeGame> loadAvailableGames(final long startTimestampMs) {
-        long initialHashKey = GameTimestampConverter.truncateHour(startTimestampMs);
+        long initialHashKey = TimeUtils.truncateHour(startTimestampMs);
 
         List<MatchMadeGame> result = queryByTime(initialHashKey, null);
         if (!result.isEmpty()) {
@@ -114,7 +115,7 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
 
         // If the initial query was empty, it could be because the hour just flipped.
         // This 2nd query allows us to query for matches created in the last 61-120 minutes.
-        return queryByTime(GameTimestampConverter.truncateHour(initialHashKey - 1L), null);
+        return queryByTime(TimeUtils.truncateHour(initialHashKey - 1L), null);
     }
 
     private List<MatchMadeGame> queryByTime(final long timestampHr, @Nullable final Map<String, AttributeValue> lastEvaluatedKey) {

@@ -1,7 +1,7 @@
 package com.frjgames.app.api.models.inputs;
 
-import com.frjgames.app.api.AuthenticateUserSessionHandler;
-import com.frjgames.app.sessions.models.SessionData;
+import com.frjgames.app.api.models.interfaces.AuthenticateUserSessionHandler;
+import com.frjgames.app.internal.sessions.models.SessionData;
 import lombok.Builder;
 import lombok.Data;
 
