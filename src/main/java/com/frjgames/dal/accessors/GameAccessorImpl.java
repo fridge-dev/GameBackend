@@ -27,11 +27,18 @@ public class GameAccessorImpl implements GameAccessor {
 
     private final DynamoDbAccessor<GameDdbItem> ddbAccessor;
 
+    /**
+     * Not supported.
+     * @see com.frjgames.dal.models.interfaces.MatchMadeGameAccessor
+     */
     @Override
     public void create(final Game data) {
         throw new UnsupportedOperationException("Games are created by MatchMadeGameAccessor#updateMatchWithGuestUser()");
     }
 
+    /**
+     * Load a game.
+     */
     @Override
     public Optional<Game> load(final GameIdKey key) {
         return ddbAccessor.loadItem(key.getGameId())
@@ -79,6 +86,9 @@ public class GameAccessorImpl implements GameAccessor {
         }
     }
 
+    /**
+     * Update match with a result.
+     */
     @Override
     public void updateGameCompleted(final GameIdKey key, final GameStatusResultType statusType, @Nullable final String winnerUserId) {
         // Load

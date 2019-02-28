@@ -15,7 +15,7 @@ import lombok.Data;
  */
 @Data
 @Builder(toBuilder = true)
-public class Game implements AppDataModel{
+public class Game implements AppDataModel {
 
     private final String gameId;
 
