@@ -85,7 +85,7 @@ public class HashParamsEncoderTest {
     }
 
     private void validateIllegalArg_EncodeHash(final Consumer<PasswordHashParamsBuilder> modifier) throws Exception {
-        TestUtilExceptionValidator.validateThrown(InvalidHashException.class, () -> encoder.encodeHash(newRandomParams(modifier)));
+        TestUtilExceptionValidator.assertThrows(InvalidHashException.class, () -> encoder.encodeHash(newRandomParams(modifier)));
     }
 
     @Test
@@ -135,7 +135,7 @@ public class HashParamsEncoderTest {
     }
 
     private void validateIllegalArg_DecodeHash(final String encodedHash) throws Exception {
-        TestUtilExceptionValidator.validateThrown(InvalidHashException.class, () -> encoder.decodeHash(encodedHash));
+        TestUtilExceptionValidator.assertThrows(InvalidHashException.class, () -> encoder.decodeHash(encodedHash));
     }
 
     private PasswordHashParams newRandomParams(final Consumer<PasswordHashParamsBuilder> modifier) {

@@ -149,6 +149,8 @@ public class MatchMadeGameAccessorImpl implements MatchMadeGameAccessor {
         GameDdbItem gameItem = ddbAccessor.loadItem(key.getGameId())
                 .orElseThrow(() -> new MissingDataException(String.format("Cannot update game %s which isn't present in DB.", key.getGameId())));
 
+        // Note: Below is business logic in a DAO. This is bad. I don't have time to make it right though.
+
         // Validate the match
         FrjConditions.checkArg(gameItem.getStatus() == GameStatusType.UNMATCHED,
                 () -> new InvalidDataException("Game state should be unmatched, but is " + gameItem.getStatus()));

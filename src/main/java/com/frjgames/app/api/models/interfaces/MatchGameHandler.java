@@ -1,5 +1,8 @@
 package com.frjgames.app.api.models.interfaces;
 
+import com.frjgames.app.api.models.exceptions.GameAlreadyMatchedException;
+import com.frjgames.app.api.models.exceptions.IllegalGameUpdateException;
+import com.frjgames.app.api.models.exceptions.InvalidInputException;
 import com.frjgames.app.api.models.inputs.MatchGameInput;
 
 /**
@@ -9,6 +12,6 @@ import com.frjgames.app.api.models.inputs.MatchGameInput;
  */
 public interface MatchGameHandler {
 
-    void matchGame(MatchGameInput matchGameInput);
+    void matchGame(MatchGameInput matchGameInput) throws InvalidInputException, IllegalGameUpdateException, GameAlreadyMatchedException;
 
 }

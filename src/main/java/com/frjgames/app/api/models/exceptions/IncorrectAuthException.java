@@ -8,7 +8,7 @@ package com.frjgames.app.api.models.exceptions;
  *
  * @author fridge
  */
-public class IncorrectAuthException extends ClientException {
+public class IncorrectAuthException extends FrjAppException {
     public IncorrectAuthException(String message, Throwable cause) {
         super(message, cause);
     }

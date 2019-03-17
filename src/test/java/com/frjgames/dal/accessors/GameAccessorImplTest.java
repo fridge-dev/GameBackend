@@ -144,7 +144,7 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
         gameAccessor.updateGameCompleted(key, GameStatusResultType.COMPLETED_VICTORY, HOST_USER_ID);
 
         // Duplicate call fails
-        TestUtilExceptionValidator.validateThrown(
+        TestUtilExceptionValidator.assertThrows(
                 InvalidDataException.class,
                 () -> gameAccessor.updateGameCompleted(key, GameStatusResultType.COMPLETED_VICTORY, HOST_USER_ID)
         );
@@ -154,7 +154,7 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
     public void updateGameCompleted_FromStatusUnmatched() throws Exception {
         matchMadeGameAccessor.create(newMatchMadeGame());
 
-        TestUtilExceptionValidator.validateThrown(
+        TestUtilExceptionValidator.assertThrows(
                 InvalidDataException.class,
                 () -> gameAccessor.updateGameCompleted(key, GameStatusResultType.COMPLETED_VICTORY, HOST_USER_ID)
         );
@@ -164,14 +164,14 @@ public class GameAccessorImplTest extends TestUtilDynamoDbLocalTestBase<GameDdbI
     public void updateGameCompleted_ToInvalidStatus() throws Exception {
         commonSetupAndAssertions();
 
-        TestUtilExceptionValidator.validateIllegalArg(() -> gameAccessor.updateGameCompleted(key, GameStatusResultType.DELETED, "not-you"));
+        TestUtilExceptionValidator.assertIllegalArg(() -> gameAccessor.updateGameCompleted(key, GameStatusResultType.DELETED, "not-you"));
     }
 
     @Test
     public void updateGameCompleted_WinnerNotPlayer() throws Exception {
         commonSetupAndAssertions();
 
-        TestUtilExceptionValidator.validateIllegalArg(() -> gameAccessor.updateGameCompleted(key, GameStatusResultType.COMPLETED_VICTORY, "not-you"));
+        TestUtilExceptionValidator.assertIllegalArg(() -> gameAccessor.updateGameCompleted(key, GameStatusResultType.COMPLETED_VICTORY, "not-you"));
     }
 
     @Test(expected = UnsupportedOperationException.class)

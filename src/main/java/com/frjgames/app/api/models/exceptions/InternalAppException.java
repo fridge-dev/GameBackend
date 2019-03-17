@@ -5,7 +5,7 @@ package com.frjgames.app.api.models.exceptions;
  *
  * @author fridge
  */
-public class InternalAppException extends Exception {
+public class InternalAppException extends FrjAppException {
     public InternalAppException(final String message, final Throwable cause) {
         super(message, cause);
     }

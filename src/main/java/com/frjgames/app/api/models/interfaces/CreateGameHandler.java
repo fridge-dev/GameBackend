@@ -1,5 +1,6 @@
 package com.frjgames.app.api.models.interfaces;
 
+import com.frjgames.app.api.models.exceptions.DuplicateGameException;
 import com.frjgames.app.api.models.inputs.CreateGameInput;
 
 /**
@@ -9,6 +10,6 @@ import com.frjgames.app.api.models.inputs.CreateGameInput;
  */
 public interface CreateGameHandler extends ApiHandler {
 
-    void createGame(CreateGameInput createGameInput);
+    void createGame(CreateGameInput createGameInput) throws DuplicateGameException;
 
 }

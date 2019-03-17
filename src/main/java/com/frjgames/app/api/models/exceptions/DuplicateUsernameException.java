@@ -5,7 +5,7 @@ package com.frjgames.app.api.models.exceptions;
  *
  * @author fridge
  */
-public class DuplicateUsernameException extends ClientException {
+public class DuplicateUsernameException extends FrjAppException {
     public DuplicateUsernameException(String message, Throwable cause) {
         super(message, cause);
     }

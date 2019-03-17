@@ -66,7 +66,7 @@ public class MatchMadeGameAccessorImplTest extends TestUtilDynamoDbLocalTestBase
         assertEquals(expectedGame, gameAccessor.loadByName(GAME_NAME).orElse(null));
 
         // 4. Create (duplicate ID)
-        TestUtilExceptionValidator.validateThrown(
+        TestUtilExceptionValidator.assertThrows(
                 ConditionalWriteException.class,
                 () -> gameAccessor.create(persistedGame)
         );
@@ -146,7 +146,7 @@ public class MatchMadeGameAccessorImplTest extends TestUtilDynamoDbLocalTestBase
 
         gameAccessor.updateMatchWithGuestUser(key, GUEST_USER_ID);
 
-        TestUtilExceptionValidator.validateThrown(InvalidDataException.class,
+        TestUtilExceptionValidator.assertThrows(InvalidDataException.class,
                 () -> gameAccessor.updateMatchWithGuestUser(key, "other" + GUEST_USER_ID)
         );
     }
@@ -160,7 +160,7 @@ public class MatchMadeGameAccessorImplTest extends TestUtilDynamoDbLocalTestBase
 
         gameAccessor.create(game);
 
-        TestUtilExceptionValidator.validateThrown(InvalidDataException.class,
+        TestUtilExceptionValidator.assertThrows(InvalidDataException.class,
                 () -> gameAccessor.updateMatchWithGuestUser(key, game.getHostUserId())
         );
     }

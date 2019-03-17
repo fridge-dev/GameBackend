@@ -1,67 +1,37 @@
 package com.frjgames.app.api.config;
 
-import com.frjgames.app.api.handlers.CreateUserHandlerImpl;
-import com.frjgames.app.api.handlers.LoginUserHandlerImpl;
 import com.frjgames.app.api.models.interfaces.ApiHandler;
-import com.frjgames.app.api.models.interfaces.LoginUserHandler;
+import com.frjgames.app.api.models.interfaces.AuthenticateUserSessionHandler;
+import com.frjgames.app.api.models.interfaces.CreateGameHandler;
 import com.frjgames.app.api.models.interfaces.CreateUserHandler;
-import com.frjgames.app.internal.password.PasswordModule;
-import com.frjgames.app.internal.sessions.SessionModule;
+import com.frjgames.app.api.models.interfaces.LoginUserHandler;
+import com.frjgames.app.api.models.interfaces.MatchGameHandler;
+import com.frjgames.app.api.models.interfaces.SaveEverlastHighScore;
 import com.frjgames.dal.config.DataAccessLayerModule;
-import lombok.Synchronized;
 
 /**
- * Configuration class for instantiating {@link ApiHandler} implementations.
+ * Module for getting {@link ApiHandler} classes.
  *
  * @author fridge
  */
-public class ApiHandlerModule {
+public interface ApiHandlerModule {
+
+    CreateUserHandler getCreateUserHandler();
+
+    LoginUserHandler getLoginUserHandler();
+
+    CreateGameHandler getCreateGameHandler();
+
+    MatchGameHandler getMatchGameHandler();
+
+    SaveEverlastHighScore getSaveEverlastHighScore();
+
+    AuthenticateUserSessionHandler getAuthenticateUserSessionHandler();
 
     /**
-     * Dependencies
+     * Factory as part of the interface. Since there's only one choice. :0
      */
-    private final DataAccessLayerModule dataAccessLayerModule;
-    private final SessionModule sessionModule;
-    private final PasswordModule passwordModule = new PasswordModule();
-
-    /**
-     * Internal classes
-     */
-    private CreateUserHandler createUserHandlerSingleton;
-    private LoginUserHandler loginUserHandlerSingleton;
-
-    /**
-     * Instantiate all application layer modules with the low level modules.
-     */
-    public ApiHandlerModule(final DataAccessLayerModule dataAccessLayerModule) {
-        this.dataAccessLayerModule = dataAccessLayerModule;
-        this.sessionModule = new SessionModule(dataAccessLayerModule.userSessionAccessor());
+    static ApiHandlerModule instantiateModule(final DataAccessLayerModule dataAccessLayerModule) {
+        return new ApiHandlerModuleImpl(dataAccessLayerModule);
     }
-
-    @Synchronized
-    public CreateUserHandler getCreateUserHandler() {
-        if (createUserHandlerSingleton == null) {
-            createUserHandlerSingleton = new CreateUserHandlerImpl(
-                    dataAccessLayerModule.userAccessor(),
-                    sessionModule.sessionManager(),
-                    passwordModule.passwordHasher()
-            );
-        }
-
-        return createUserHandlerSingleton;
-    }
-
-    @Synchronized
-    public LoginUserHandler getAuthenticateUserHandler() {
-        if (loginUserHandlerSingleton == null) {
-            loginUserHandlerSingleton = new LoginUserHandlerImpl(
-                    dataAccessLayerModule.userAccessor(),
-                    sessionModule.sessionManager(),
-                    passwordModule.passwordHasher()
-            );
-        }
-
-        return loginUserHandlerSingleton;
-    }
-
 }

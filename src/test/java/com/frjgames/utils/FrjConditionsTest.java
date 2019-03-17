@@ -20,10 +20,10 @@ public class FrjConditionsTest {
         FrjConditions.checkArg(true, CHECKED_EXCEPTION);
         FrjConditions.checkArg(true, UNCHECKED_EXCEPTION);
 
-        TestUtilExceptionValidator.validateThrown(IOException.class,
+        TestUtilExceptionValidator.assertThrows(IOException.class,
                 () -> FrjConditions.checkArg(false, CHECKED_EXCEPTION)
         );
-        TestUtilExceptionValidator.validateThrown(IllegalStateException.class,
+        TestUtilExceptionValidator.assertThrows(IllegalStateException.class,
                 () -> FrjConditions.checkArg(false, UNCHECKED_EXCEPTION)
         );
     }
@@ -33,10 +33,10 @@ public class FrjConditionsTest {
         FrjConditions.checkNotNull("", CHECKED_EXCEPTION);
         FrjConditions.checkNotNull("", UNCHECKED_EXCEPTION);
 
-        TestUtilExceptionValidator.validateThrown(IOException.class,
+        TestUtilExceptionValidator.assertThrows(IOException.class,
                 () -> FrjConditions.checkNotNull(null, CHECKED_EXCEPTION)
         );
-        TestUtilExceptionValidator.validateThrown(IllegalStateException.class,
+        TestUtilExceptionValidator.assertThrows(IllegalStateException.class,
                 () -> FrjConditions.checkNotNull(null, UNCHECKED_EXCEPTION)
         );
     }

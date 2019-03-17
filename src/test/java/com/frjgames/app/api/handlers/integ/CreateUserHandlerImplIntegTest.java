@@ -4,16 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.frjgames.app.api.config.ApiHandlerModule;
 import com.frjgames.app.api.handlers.CreateUserHandlerImpl;
-import com.frjgames.app.api.models.interfaces.CreateUserHandler;
+import com.frjgames.app.api.handlers.integ.testutils.ApiHandleIntegTestBase;
 import com.frjgames.app.api.models.exceptions.DuplicateUsernameException;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
+import com.frjgames.app.api.models.interfaces.CreateUserHandler;
 import com.frjgames.app.api.models.outputs.CreateUserOutput;
 import com.frjgames.app.internal.sessions.models.SessionData;
 import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.items.UserSessionDdbItem;
-import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbLocalTestBase;
 import com.frjgames.testutils.TestUtilExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,7 @@ import org.junit.Test;
  *
  * @author fridge
  */
-public class CreateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBase {
+public class CreateUserHandlerImplIntegTest extends ApiHandleIntegTestBase {
 
     private CreateUserHandler createUserHandler;
 
@@ -33,9 +32,7 @@ public class CreateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBas
 
     @Before
     public void setup() {
-        ApiHandlerModule apiHandlerModule = new ApiHandlerModule(getDalModule());
-
-        createUserHandler = apiHandlerModule.getCreateUserHandler();
+        createUserHandler = getApiHandlerModule().getCreateUserHandler();
     }
 
     @Test
@@ -62,6 +59,6 @@ public class CreateUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBas
 
         createUserHandler.handle(input);
 
-        TestUtilExceptionValidator.validateThrown(DuplicateUsernameException.class, () -> createUserHandler.handle(input));
+        TestUtilExceptionValidator.assertThrows(DuplicateUsernameException.class, () -> createUserHandler.handle(input));
     }
 }

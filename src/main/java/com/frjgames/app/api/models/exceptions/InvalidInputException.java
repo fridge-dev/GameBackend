@@ -5,7 +5,7 @@ package com.frjgames.app.api.models.exceptions;
  *
  * @author fridge
  */
-public class InvalidInputException extends ClientException {
+public class InvalidInputException extends FrjAppException {
     public InvalidInputException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -54,15 +54,15 @@ public class GameBoardStateMapperTest {
     public void convertPlayer() throws Exception {
         assertEquals(GameBoardPlayerDdbType.PLAYER_ONE, GameBoardStateMapper.convertPlayer(PlayerEnum.ONE));
         assertEquals(GameBoardPlayerDdbType.PLAYER_TWO, GameBoardStateMapper.convertPlayer(PlayerEnum.TWO));
-        TestUtilExceptionValidator.validateIllegalArg(() -> GameBoardStateMapper.convertPlayer(null));
+        TestUtilExceptionValidator.assertIllegalArg(() -> GameBoardStateMapper.convertPlayer(null));
     }
 
     @Test
     public void unconvertPlayer() throws Exception {
         assertEquals(PlayerEnum.ONE, GameBoardStateMapper.unconvertPlayer(GameBoardPlayerDdbType.PLAYER_ONE));
         assertEquals(PlayerEnum.TWO, GameBoardStateMapper.unconvertPlayer(GameBoardPlayerDdbType.PLAYER_TWO));
-        TestUtilExceptionValidator.validateThrown(InvalidDataException.class, () -> GameBoardStateMapper.unconvertPlayer(GameBoardPlayerDdbType.NEITHER));
-        TestUtilExceptionValidator.validateThrown(InvalidDataException.class, () -> GameBoardStateMapper.unconvertPlayer(null));
+        TestUtilExceptionValidator.assertThrows(InvalidDataException.class, () -> GameBoardStateMapper.unconvertPlayer(GameBoardPlayerDdbType.NEITHER));
+        TestUtilExceptionValidator.assertThrows(InvalidDataException.class, () -> GameBoardStateMapper.unconvertPlayer(null));
     }
 
     @Test

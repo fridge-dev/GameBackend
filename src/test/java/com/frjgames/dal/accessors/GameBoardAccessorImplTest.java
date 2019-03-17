@@ -68,7 +68,7 @@ public class GameBoardAccessorImplTest extends TestUtilDynamoDbLocalTestBase<Gam
         assertNotNull(gameBoard.getBoardVersion());
 
         // 4. Duplicate Create (rejected)
-        TestUtilExceptionValidator.validateThrown(ConditionalWriteException.class, () -> gameBoardAccessor.create(gameBoard));
+        TestUtilExceptionValidator.assertThrows(ConditionalWriteException.class, () -> gameBoardAccessor.create(gameBoard));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class GameBoardAccessorImplTest extends TestUtilDynamoDbLocalTestBase<Gam
         assertNotEquals(gameBoard.getBoardVersion(), gameBoard2.getBoardVersion());
 
         // 5. Duplicate update (rejected).
-        TestUtilExceptionValidator.validateThrown(ConditionalWriteException.class, () -> gameBoardAccessor.updateBoardWithMove(gameBoard));
+        TestUtilExceptionValidator.assertThrows(ConditionalWriteException.class, () -> gameBoardAccessor.updateBoardWithMove(gameBoard));
     }
 
 }

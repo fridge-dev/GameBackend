@@ -14,7 +14,7 @@ public class TestUtilExceptionValidator {
     /**
      * Validate an exception is thrown by the method under test.
      */
-    public static <T extends Throwable> void validateThrown(final Class<T> clazz, final RunnableThrows runnable) throws Exception {
+    public static <T extends Throwable> void assertThrows(final Class<T> clazz, final RunnableThrows runnable) throws Exception {
         try {
             runnable.runThrows();
             fail(String.format("Expected exception of type %s", clazz.getName()));
@@ -31,8 +31,8 @@ public class TestUtilExceptionValidator {
      * This is a separate util, since it is extremely common in our UTs to validate for IAE.
      * Not every exception should get its own method, like this.
      */
-    public static void validateIllegalArg(final RunnableThrows runnable) throws Exception {
-        validateThrown(IllegalArgumentException.class, runnable);
+    public static void assertIllegalArg(final RunnableThrows runnable) throws Exception {
+        assertThrows(IllegalArgumentException.class, runnable);
     }
 
 }

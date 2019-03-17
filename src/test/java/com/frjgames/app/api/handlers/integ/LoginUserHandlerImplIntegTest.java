@@ -2,17 +2,16 @@ package com.frjgames.app.api.handlers.integ;
 
 import static org.junit.Assert.assertNotNull;
 
-import com.frjgames.app.api.config.ApiHandlerModule;
 import com.frjgames.app.api.handlers.LoginUserHandlerImpl;
-import com.frjgames.app.api.models.interfaces.LoginUserHandler;
-import com.frjgames.app.api.models.interfaces.CreateUserHandler;
+import com.frjgames.app.api.handlers.integ.testutils.ApiHandleIntegTestBase;
 import com.frjgames.app.api.models.exceptions.IncorrectAuthException;
-import com.frjgames.app.api.models.inputs.LoginUserInput;
 import com.frjgames.app.api.models.inputs.CreateUserInput;
+import com.frjgames.app.api.models.inputs.LoginUserInput;
+import com.frjgames.app.api.models.interfaces.CreateUserHandler;
+import com.frjgames.app.api.models.interfaces.LoginUserHandler;
 import com.frjgames.app.api.models.outputs.LoginUserOutput;
 import com.frjgames.dal.ddb.items.UserDdbItem;
 import com.frjgames.dal.ddb.items.UserSessionDdbItem;
-import com.frjgames.dal.ddb.testutils.TestUtilDynamoDbLocalTestBase;
 import com.frjgames.testutils.TestUtilExceptionValidator;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @author fridge
  */
 @RunWith(MockitoJUnitRunner.class)
-public class LoginUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBase {
+public class LoginUserHandlerImplIntegTest extends ApiHandleIntegTestBase {
 
     private static final String USERNAME = "lsiuhgralsguhr";
     private static final String PASSWORD = "9f127hl2hi4f12of4";
@@ -49,16 +48,14 @@ public class LoginUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBase
 
     @Before
     public void setup() {
-        ApiHandlerModule apiHandlerModule = new ApiHandlerModule(getDalModule());
-
-        loginUserHandler = apiHandlerModule.getAuthenticateUserHandler();
-        createUserHandler = apiHandlerModule.getCreateUserHandler();
+        loginUserHandler = getApiHandlerModule().getLoginUserHandler();
+        createUserHandler = getApiHandlerModule().getCreateUserHandler();
     }
 
     @Test
     public void authenticateUser() throws Exception {
         // Attempt when no user exists
-        TestUtilExceptionValidator.validateThrown(IncorrectAuthException.class,
+        TestUtilExceptionValidator.assertThrows(IncorrectAuthException.class,
                 () -> loginUserHandler.handle(AUTH_INPUT)
         );
 
@@ -74,7 +71,7 @@ public class LoginUserHandlerImplIntegTest extends TestUtilDynamoDbLocalTestBase
                 .username(USERNAME)
                 .password("incorrect-password")
                 .build();
-        TestUtilExceptionValidator.validateThrown(IncorrectAuthException.class,
+        TestUtilExceptionValidator.assertThrows(IncorrectAuthException.class,
                 () -> loginUserHandler.handle(inputWithIncorrectPassword)
         );
     }

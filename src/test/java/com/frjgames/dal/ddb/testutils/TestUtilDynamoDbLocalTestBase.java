@@ -20,6 +20,9 @@ public abstract class TestUtilDynamoDbLocalTestBase<T extends DdbItem> {
 
     private final Set<Class<? extends DdbItem>> itemsToCreate;
 
+    @Getter(AccessLevel.PROTECTED)
+    private DataAccessLayerModule dalModule;
+
     public TestUtilDynamoDbLocalTestBase(final Class<T> clazz) {
         this.itemsToCreate = Collections.singleton(clazz);
     }
@@ -31,11 +34,8 @@ public abstract class TestUtilDynamoDbLocalTestBase<T extends DdbItem> {
         this.itemsToCreate.addAll(Arrays.asList(tablesToCreate));
     }
 
-    @Getter(AccessLevel.PROTECTED)
-    private DataAccessLayerModule dalModule;
-
     @Before
-    public void superBefore() {
+    public void beforeTestUtilDynamoDbLocalTestBase() {
         dalModule = DataAccessLayerModuleFactory.getModuleLocal(itemsToCreate);
     }
 

@@ -31,7 +31,7 @@ public class GameBoardPlayerDdbTypeConverterTest {
         assertEquals(2, (int) converter.convert(GameBoardPlayerDdbType.PLAYER_TWO));
         assertEquals(-1, (int) converter.convert(GameBoardPlayerDdbType.NEITHER));
 
-        TestUtilExceptionValidator.validateIllegalArg(() -> converter.convert(null));
+        TestUtilExceptionValidator.assertIllegalArg(() -> converter.convert(null));
     }
 
     @Test
@@ -40,8 +40,8 @@ public class GameBoardPlayerDdbTypeConverterTest {
         assertEquals(GameBoardPlayerDdbType.PLAYER_TWO, converter.unconvert(2));
         assertEquals(GameBoardPlayerDdbType.NEITHER, converter.unconvert(-1));
 
-        TestUtilExceptionValidator.validateIllegalArg(() -> converter.unconvert(null));
-        TestUtilExceptionValidator.validateIllegalArg(() -> converter.unconvert(0));
-        TestUtilExceptionValidator.validateIllegalArg(() -> converter.unconvert(3));
+        TestUtilExceptionValidator.assertIllegalArg(() -> converter.unconvert(null));
+        TestUtilExceptionValidator.assertIllegalArg(() -> converter.unconvert(0));
+        TestUtilExceptionValidator.assertIllegalArg(() -> converter.unconvert(3));
     }
 }

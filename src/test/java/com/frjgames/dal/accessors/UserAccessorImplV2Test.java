@@ -48,7 +48,7 @@ public class UserAccessorImplV2Test extends TestUtilDynamoDbLocalTestBase<UserDd
 
         accessor.create(user);
 
-        TestUtilExceptionValidator.validateThrown(ConditionalWriteException.class, () -> accessor.create(user));
+        TestUtilExceptionValidator.assertThrows(ConditionalWriteException.class, () -> accessor.create(user));
     }
 
     @Test
