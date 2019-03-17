@@ -5,9 +5,9 @@ import javax.ws.rs.BadRequestException;
 import org.junit.Test;
 
 /**
- * TODO
+ * Tests the {@link UserController} in a brittle fashion. Good luck future me!
  *
- * @author TODO
+ * @author fridge
  */
 public class UserControllerTest {
 

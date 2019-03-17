@@ -15,12 +15,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * TODO
+ * The top level bean-wiring module grandfather.
  *
- * @author TODO
+ * TODO migrate this to Guice/Spring.
+ *
+ * @author fridge
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ModuleContainer {
+public class ApiHandlerModuleSingleton {
 
     private static final Set<Class<? extends DdbItem>> DDB_TABLES = ImmutableSet.of(
             UserDdbItem.class,
@@ -29,11 +31,9 @@ public class ModuleContainer {
             GameBoardDdbItem.class
     );
 
+    @Getter(lazy = true, value = AccessLevel.PRIVATE)
+    private static final DataAccessLayerModule dal = DataAccessLayerModuleFactory.getModuleLocal(DDB_TABLES);
+
     @Getter(lazy = true)
-    private static final ModuleContainer instance = new ModuleContainer();
-
-    private final DataAccessLayerModule dal = DataAccessLayerModuleFactory.getModuleLocal(DDB_TABLES);
-
-    @Getter
-    private final ApiHandlerModule api = ApiHandlerModule.instantiateModule(dal);
+    private static final ApiHandlerModule instance = ApiHandlerModule.instantiateModule(getDal());
 }
