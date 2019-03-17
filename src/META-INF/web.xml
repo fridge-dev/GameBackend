@@ -7,7 +7,7 @@
         version="3.1"
     >
 
-    <display-name>Frj Test</display-name>
+    <display-name>Frj Test Display Name</display-name>
 
     <!-- Define ServletContainer of Jersey -->
     <servlet>
@@ -24,7 +24,7 @@
     <!-- Map all the URLs to the Jersey ServletContainer -->
     <servlet-mapping>
         <servlet-name>FrjDemo</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/rest/v1/*</url-pattern>
     </servlet-mapping>
 
 </web-app>

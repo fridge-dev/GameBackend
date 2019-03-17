@@ -71,6 +71,7 @@
                         <exclude>**/com/frjgames/app/password/PasswordModule.class</exclude>
                         <exclude>**/com/frjgames/app/sessions/SessionModule.class</exclude>
                         <exclude>**/com/frjgames/rest/Application.class</exclude>
+                        <exclude>**/com/frjgames/rest/controllers/UserController$CreateUserRestRequest.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
@@ -202,14 +203,16 @@
             <version>1.4.0</version>
         </dependency>
 
-        <!-- JAX-RS from https://howtodoinjava.com/jersey/jersey-2-hello-world-application-tutorial/ -->
+        <!-- JAX-RS -->
+        <!-- from https://howtodoinjava.com/jersey/jersey-2-hello-world-application-tutorial/ -->
         <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>javax.ws.rs-api</artifactId>
             <version>2.0.1</version>
         </dependency>
 
-        <!-- Jersey from https://howtodoinjava.com/jersey/jersey-2-hello-world-application-tutorial/ -->
+        <!-- Jersey -->
+        <!-- from https://howtodoinjava.com/jersey/jersey-2-hello-world-application-tutorial/ -->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
