@@ -17,6 +17,8 @@
         <jacoco.threshold.complexity>0.80</jacoco.threshold.complexity>
 
         <dependencies.jersey2.version>2.28</dependencies.jersey2.version>
+
+        <exec.mainClass>com.frjgames.Main</exec.mainClass>
     </properties>
 
     <build>
@@ -67,7 +69,6 @@
 
                         <!-- Individual Classes -->
                         <exclude>**/com/frjgames/dal/ddb/accessors/DynamoDbAccessor.class</exclude>
-                        <exclude>**/com/frjgames/dal/accessors/MatchMadeGameAccessorImpl$GamePaginationToken.class</exclude>
                         <exclude>**/com/frjgames/app/password/PasswordModule.class</exclude>
                         <exclude>**/com/frjgames/app/sessions/SessionModule.class</exclude>
                         <exclude>**/com/frjgames/rest/ApiHandlerModuleSingleton.class</exclude>
