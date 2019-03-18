@@ -2,6 +2,7 @@ package com.frjgames;
 
 import com.frjgames.rest.FrjHttpServer;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Entry point of application.
@@ -10,7 +11,9 @@ import java.io.IOException;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
+        System.out.println("Received args: " + Arrays.toString(args));
+
         FrjHttpServer server = new FrjHttpServer();
 
         System.out.println(String.format("Jersey app started with WADL available at %sapplication.wadl", server.getBaseUri()));
